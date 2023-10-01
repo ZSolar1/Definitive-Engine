@@ -43,7 +43,7 @@ class Song
 	{
 		var rawJson:String = '';
 		try{
-			rawJson = File.getContent('assets/data/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim(); //changed Assets.getText to File.getContent, the getText wasnt working. idk man :/
+			rawJson = File.getContent('assets/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim(); //changed Assets.getText to File.getContent, the getText wasnt working. idk man :/
 		}catch(e){
 			rawJson = File.getContent('./mods/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim();
 		}

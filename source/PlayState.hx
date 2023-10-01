@@ -1,4 +1,4 @@
-package; //_Inst
+package; //catch
 
 import openfl.media.Sound;
 import Section.SwagSection;
@@ -46,7 +46,6 @@ class PlayState extends MusicBeatState
 {
 	public static var curStage:String = '';
 	public static var SONG:SwagSong;
-	public static var isModded:Bool = false;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
@@ -971,10 +970,19 @@ class PlayState extends MusicBeatState
 
 		if (!paused)
 		{
-			if (!isModded)
-				FlxG.sound.playMusic(Sound.fromFile("assets/music/" + SONG.song + "_Inst" + TitleState.soundExt), 1, false);
-			else
-				FlxG.sound.playMusic(Sound.fromFile('assets/mods/songs/${SONG.song.toLowerCase()}/${SONG.song}_Inst' + TitleState.soundExt), 1, false);
+			if (SONG.needsVoices){
+				try{
+					FlxG.sound.playMusic(Sound.fromFile("assets/songs/" + SONG.song + "/Inst" + TitleState.soundExt), 1, false);
+				}catch(e){
+					FlxG.sound.playMusic(Sound.fromFile('mods/songs/${SONG.song.toLowerCase()}/Inst' + TitleState.soundExt), 1, false);
+				}
+			}else{
+				try{
+					FlxG.sound.playMusic(Sound.fromFile("assets/songs/" + SONG.song + "/" + SONG.song  + TitleState.soundExt), 1, false);
+				}catch(e){
+					FlxG.sound.playMusic(Sound.fromFile('mods/songs/${SONG.song.toLowerCase()}/' + SONG.song + TitleState.soundExt), 1, false);
+				}
+			}
 		}
 		FlxG.sound.music.onComplete = endSong;
 		vocals.play();
@@ -992,10 +1000,11 @@ class PlayState extends MusicBeatState
 		curSong = songData.song;
 
 		if (SONG.needsVoices)
-			if (!isModded)
-				vocals = new FlxSound().loadEmbedded(Sound.fromFile("assets/music/" + curSong + "_Voices" + TitleState.soundExt));
-			else
-				vocals = new FlxSound().loadEmbedded(Sound.fromFile('assets/mods/songs/${curSong.toLowerCase()}/${curSong}_Voices' + TitleState.soundExt));
+			try{
+				vocals = new FlxSound().loadEmbedded(Sound.fromFile("assets/songs/" + curSong + "/Voices" + TitleState.soundExt));
+			}catch(e){
+				vocals = new FlxSound().loadEmbedded(Sound.fromFile('mods/songs/${curSong.toLowerCase()}/${curSong}/Voices' + TitleState.soundExt));
+			}
 		else
 			vocals = new FlxSound();
 
@@ -1009,12 +1018,12 @@ class PlayState extends MusicBeatState
 		// NEW SHIT
 		noteData = songData.notes;
 
-		var playerCounter:Int = 0;
+		//var playerCounter:Int = 0;
 
 		var daBeats:Int = 0; // Not exactly representative of 'daBeats' lol, just how much it has looped
 		for (section in noteData)
 		{
-			var coolSection:Int = Std.int(section.lengthInSteps / 4);
+			//var coolSection:Int = Std.int(section.lengthInSteps / 4);
 
 			for (songNotes in section.sectionNotes)
 			{
