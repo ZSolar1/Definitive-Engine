@@ -1,5 +1,8 @@
-package; //catch
+package states; //line 361
 
+import sys.FileSystem;
+import modded.scripting.ShmoovinHScript;
+import modded.scripting.ShmoovinLua;
 import openfl.media.Sound;
 import Section.SwagSection;
 import Song.SwagSong;
@@ -39,6 +42,9 @@ import lime.utils.Assets;
 import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.ShaderFilter;
+import modcharting.ModchartFuncs;
+import modcharting.NoteMovement;
+import modcharting.PlayfieldRenderer;
 
 using StringTools;
 
@@ -47,9 +53,11 @@ class PlayState extends MusicBeatState
 	public static var curStage:String = '';
 	public static var SONG:SwagSong;
 	public static var isStoryMode:Bool = false;
+	public static var isPixelStage:Bool = false;
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
+	public static var instance:PlayState;
 
 	var halloweenLevel:Bool = false;
 
@@ -69,8 +77,8 @@ class PlayState extends MusicBeatState
 
 	private static var prevCamFollow:FlxObject;
 
-	private var strumLineNotes:FlxTypedGroup<FlxSprite>;
-	private var playerStrums:FlxTypedGroup<FlxSprite>;
+	public var strumLineNotes:FlxTypedGroup<FlxSprite>;
+	public var playerStrums:FlxTypedGroup<FlxSprite>;
 
 	private var camZooming:Bool = false;
 	private var curSong:String = "";
@@ -123,8 +131,13 @@ class PlayState extends MusicBeatState
 
 	var inCutscene:Bool = false;
 
+	public static var luaArray:Array<ShmoovinLua> = [];
+	public static var hscriptArray:Array<ShmoovinHScript> = [];
+	public static var modName:String;
+
 	override public function create()
 	{
+		instance = this;
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
@@ -520,12 +533,14 @@ class PlayState extends MusicBeatState
 				gfVersion = 'gf-christmas';
 			case 'school':
 				gfVersion = 'gf-pixel';
+				isPixelStage = true;
 			case 'schoolEvil':
 				gfVersion = 'gf-pixel';
+				isPixelStage = true;
 		}
 
-		if (curStage == 'limo')
-			gfVersion = 'gf-car';
+		/*if (curStage == 'limo')
+			gfVersion = 'gf-car';*/
 
 		gf = new Character(400, 130, gfVersion);
 		gf.scrollFactor.set(0.95, 0.95);
@@ -635,9 +650,13 @@ class PlayState extends MusicBeatState
 
 		playerStrums = new FlxTypedGroup<FlxSprite>();
 
-		// startCountdown();
+		modName = utils.ModUtils.StaticModUtils.getModName(SONG.song);
 
 		generateSong(SONG.song);
+
+		playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
+		playfieldRenderer.cameras = [camHUD];
+		add(playfieldRenderer);
 
 		// add(strumLine);
 
@@ -701,6 +720,20 @@ class PlayState extends MusicBeatState
 		// UI_camera.zoom = 1;
 
 		// cameras = [FlxG.cameras.list[1]];
+
+		
+		if (FileSystem.exists('mods/$modName/songs/${SONG.song}/assets/modcharts/')){
+		for (modchart in FileSystem.readDirectory('mods/$modName/songs/${SONG.song}/assets/modcharts/'))
+			{
+				if (StringTools.endsWith(modchart, '.hx')){
+					hscriptArray.push(new ShmoovinHScript('mods/$modName/songs/${SONG.song}/assets/modcharts/$modchart'));
+				}
+				if (StringTools.endsWith(modchart, '.lua')){
+					luaArray.push(new ShmoovinLua('mods/$modName/songs/${SONG.song}/assets/modcharts/$modchart'));
+				}
+			}
+		}
+
 		startingSong = true;
 
 		if (isStoryMode)
@@ -756,6 +789,19 @@ class PlayState extends MusicBeatState
 		}
 
 		super.create();
+	}
+
+	
+
+	function call(func:String, params:Array<Dynamic>){
+		if (hscriptArray != []){
+		for (script in 0...hscriptArray.length){
+			hscriptArray[script].callHscript(func, params);
+		}}
+		if (luaArray != []){
+		for (script in 0...luaArray.length){
+			luaArray[script].callLua(func, params);
+		}}
 	}
 
 	function schoolIntro(?dialogueBox:DialogueBox):Void
@@ -851,6 +897,8 @@ class PlayState extends MusicBeatState
 
 		generateStaticArrows(0);
 		generateStaticArrows(1);
+
+		NoteMovement.getDefaultStrumPos(this);
 
 		talking = false;
 		startedCountdown = true;
@@ -971,21 +1019,26 @@ class PlayState extends MusicBeatState
 		if (!paused)
 		{
 			if (SONG.needsVoices){
-				try{
+				if(FileSystem.exists("assets/songs/" + SONG.song + "/Inst" + TitleState.soundExt)){
 					FlxG.sound.playMusic(Sound.fromFile("assets/songs/" + SONG.song + "/Inst" + TitleState.soundExt), 1, false);
-				}catch(e){
-					FlxG.sound.playMusic(Sound.fromFile('mods/songs/${SONG.song.toLowerCase()}/Inst' + TitleState.soundExt), 1, false);
+				}else{
+					FlxG.sound.playMusic(Sound.fromFile('mods/$modName/songs/${curSong.toLowerCase()}/Inst' + TitleState.soundExt), 1, false);
 				}
 			}else{
-				try{
+				if(FileSystem.exists("assets/songs/" + SONG.song + "/" + SONG.song  + TitleState.soundExt)){
 					FlxG.sound.playMusic(Sound.fromFile("assets/songs/" + SONG.song + "/" + SONG.song  + TitleState.soundExt), 1, false);
-				}catch(e){
-					FlxG.sound.playMusic(Sound.fromFile('mods/songs/${SONG.song.toLowerCase()}/' + SONG.song + TitleState.soundExt), 1, false);
+				}else{
+					FlxG.sound.playMusic(Sound.fromFile('mods/$modName/songs/${curSong.toLowerCase()}/${curSong.toLowerCase()}' + TitleState.soundExt), 1, false);
 				}
 			}
 		}
 		FlxG.sound.music.onComplete = endSong;
 		vocals.play();
+		//ModchartFuncs.startMod('test', 'DrunkXModifier', '', -1, this);
+		//playfieldRenderer.modifierTable.reconstructTable();
+		//playfieldRenderer.modifierTable.tweenModifier('test', 10, 1,'circOut', modcharting.Modifier.beat);
+		//ModchartFuncs.tweenModifier('test', 10, 1, 'circOut', this);
+		//ModchartFuncs.ease(2, 1, 'circOut', '10, test', this);
 	}
 
 	var debugNum:Int = 0;
@@ -1000,10 +1053,10 @@ class PlayState extends MusicBeatState
 		curSong = songData.song;
 
 		if (SONG.needsVoices)
-			try{
+			if(FileSystem.exists("assets/songs/" + curSong + "/Voices" + TitleState.soundExt)){
 				vocals = new FlxSound().loadEmbedded(Sound.fromFile("assets/songs/" + curSong + "/Voices" + TitleState.soundExt));
-			}catch(e){
-				vocals = new FlxSound().loadEmbedded(Sound.fromFile('mods/songs/${curSong.toLowerCase()}/${curSong}/Voices' + TitleState.soundExt));
+			}else{
+				vocals = new FlxSound().loadEmbedded(Sound.fromFile('mods/$modName/songs/$curSong/Voices' + TitleState.soundExt));
 			}
 		else
 			vocals = new FlxSound();
@@ -1496,7 +1549,7 @@ class PlayState extends MusicBeatState
 				FlxG.switchState(new GitarooPause());
 			}
 			else
-				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+				openSubState(new states.gameOver.GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
 			// FlxG.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 		}

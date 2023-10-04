@@ -1,4 +1,4 @@
-package;
+package states;
 
 import flash.text.TextField;
 import flixel.FlxG;

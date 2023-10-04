@@ -1,10 +1,9 @@
 package;
 
+import utils.ModUtils.StaticModUtils;
 import sys.io.File;
 import Section.SwagSection;
 import haxe.Json;
-import haxe.format.JsonParser;
-import lime.utils.Assets;
 
 using StringTools;
 
@@ -45,7 +44,7 @@ class Song
 		try{
 			rawJson = File.getContent('assets/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim(); //changed Assets.getText to File.getContent, the getText wasnt working. idk man :/
 		}catch(e){
-			rawJson = File.getContent('./mods/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim();
+			rawJson = File.getContent('mods/${StaticModUtils.getModName(folder.toLowerCase())}/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim();
 		}
 
 		while (!rawJson.endsWith("}"))

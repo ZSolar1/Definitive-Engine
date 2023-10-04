@@ -1,4 +1,4 @@
-package;
+package states;
 
 import Section.SwagSection;
 import Song.SwagSong;

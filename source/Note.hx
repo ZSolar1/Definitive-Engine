@@ -4,13 +4,16 @@ import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
-import polymod.format.ParseRules.TargetSignatureElement;
+import states.PlayState;
 
 using StringTools;
 
 class Note extends FlxSprite
 {
 	public var strumTime:Float = 0;
+	
+	public var mesh:modcharting.SustainStrip = null;
+	public var z:Float = 0;
 
 	public var mustPress:Bool = false;
 	public var noteData:Int = 0;

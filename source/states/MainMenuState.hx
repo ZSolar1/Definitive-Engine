@@ -1,4 +1,4 @@
-package;
+package states;
 
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -104,6 +104,11 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		if (FlxG.keys.pressed.CONTROL){
+			if (FlxG.keys.justPressed.D){
+				FlxG.switchState(new modded.packaged.ModEditorState());
+			}
+		}
 		if (FlxG.sound.music.volume < 0.8)
 		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
@@ -173,8 +178,8 @@ class MainMenuState extends MusicBeatState
 
 										trace("Freeplay Menu Selected");
 
-									case 'options':
-										FlxG.switchState(new OptionsMenu());
+									/*case 'options':
+										FlxG.switchState(new OptionsMenu());*/
 								}
 							});
 						}

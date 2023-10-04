@@ -1,4 +1,4 @@
-package;
+package states.gameOver;
 
 import flixel.FlxG;
 import flixel.FlxObject;

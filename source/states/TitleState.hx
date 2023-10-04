@@ -1,4 +1,4 @@
-package;
+package states;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -252,7 +252,7 @@ class TitleState extends MusicBeatState
 
 			transitioning = true;
 			new FlxTimer().start(1, function(tmr){
-				FlxG.switchState(new MainMenuState(transIn, transOut));
+				FlxG.switchState(new states.MainMenuState(transIn, transOut));
 			});
 			
 			// FlxG.sound.music.stop();

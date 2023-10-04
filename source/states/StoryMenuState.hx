@@ -1,5 +1,7 @@
-package;
+package states;
 
+import utils.GeneralUtils.StaticGeneralUtils;
+import utils.ModUtils.StaticModUtils;
 import haxe.xml.Fast;
 import sys.FileSystem;
 import sys.io.File;
@@ -15,6 +17,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.net.curl.CURLCode;
+import states.PlayState;
 
 using StringTools;
 
@@ -72,7 +75,7 @@ class StoryMenuState extends MusicBeatState
 	var rightArrow:FlxSprite;
 
 	// for mods
-	var moddedWeeks:Array<String> = [];
+	var moddedWeeks:Array<Array<String>> = [];
 	var curWeekFile:String = '';
 	var curWeekXml:Xml;
 	var fast:Fast; //idc if its deprecated, it still works okay!?
@@ -119,13 +122,15 @@ class StoryMenuState extends MusicBeatState
 		grpLocks = new FlxTypedGroup<FlxSprite>();
 		add(grpLocks);
 
-		if (FileSystem.readDirectory('assets/mods/weeks/') != null)
-			moddedWeeks = FileSystem.readDirectory('assets/mods/weeks/');
+		// week loading.
+		//moddedWeeks = [StaticModUtils.getMods(true, false), StaticModUtils.getMods(true, true, true)];
+		//trace(StaticGeneralUtils.removeBracketsFromArrayValue(moddedWeeks[0][1]));
+		//trace(moddedWeeks[0]);
 
-		for (moddedWeek in moddedWeeks)
-		{
-			// week loading.
-			curWeekFile = File.getContent('assets/mods/weeks/$moddedWeek');
+		//for (moddedWeek in moddedWeeks)
+		//{
+			//curWeekFile = File.getContent(StaticGeneralUtils.removeBracketsFromArrayValue(moddedWeek[1]) + moddedWeek[0]);
+			curWeekFile = File.getContent('mods/exampleMod/weeks/testWeek.xml');
 			curWeekXml = Xml.parse(curWeekFile);
 			fast = new Fast(curWeekXml);
 			weekData.push(getWeekDataFromXml('songs', fast));
@@ -136,7 +141,7 @@ class StoryMenuState extends MusicBeatState
 			trace(weekNames);
 			weekUnlocked.push(stringToBool(getWeekDataFromXml('unlocked', fast)));
 			trace(weekUnlocked);
-		}
+		//}
 
 		// trace("Line 70");
 
@@ -383,7 +388,7 @@ class StoryMenuState extends MusicBeatState
 		{
 			FlxG.sound.play('assets/sounds/cancelMenu' + TitleState.soundExt);
 			movedBack = true;
-			FlxG.switchState(new MainMenuState());
+			FlxG.switchState(new states.MainMenuState());
 		}
 
 		super.update(elapsed);

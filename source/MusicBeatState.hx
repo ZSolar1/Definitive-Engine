@@ -7,13 +7,15 @@ import flixel.addons.ui.FlxUIState;
 import flixel.math.FlxRect;
 import flixel.util.FlxTimer;
 
-class MusicBeatState extends FlxUIState
+class MusicBeatState extends modcharting.ModchartMusicBeatState
 {
 	private var lastBeat:Float = 0;
 	private var lastStep:Float = 0;
 
-	private var curStep:Int = 0;
-	private var curBeat:Int = 0;
+	public static var curStepS:Int = 0;
+	public static var curBeatS:Int = 0;
+	public var curStep:Int = 0;
+	public var curBeat:Int = 0;
 	private var controls(get, never):Controls;
 
 	inline function get_controls():Controls
@@ -25,7 +27,7 @@ class MusicBeatState extends FlxUIState
 			trace('reg ' + transIn.region);
 
 		#if (!web)
-		TitleState.soundExt = '.ogg';
+		states.TitleState.soundExt = '.ogg';
 		#end
 
 		super.create();
@@ -48,6 +50,7 @@ class MusicBeatState extends FlxUIState
 	private function updateBeat():Void
 	{
 		curBeat = Math.floor(curStep / 4);
+		curBeatS = curBeat;
 	}
 
 	private function updateCurStep():Void
@@ -64,6 +67,7 @@ class MusicBeatState extends FlxUIState
 		}
 
 		curStep = lastChange.stepTime + Math.floor((Conductor.songPosition - lastChange.songTime) / Conductor.stepCrochet);
+		curStepS = curStep;
 	}
 
 	public function stepHit():Void
