@@ -22,14 +22,16 @@ import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.FlxG;
 
-typedef SongData = {
+typedef SongData =
+{
 	var color:FlxColor;
 	var name:String;
 	var icon:String;
 	var diffs:Array<String>;
 }
 
-class FreeplayState extends MusicBeatState{
+class FreeplayState extends MusicBeatState
+{
 	var songs:Array<SongData> = [];
 	var curSelSong:Int = 0;
 	var curSelDiff:Int = 0;
@@ -54,7 +56,8 @@ class FreeplayState extends MusicBeatState{
 	var gradient:FlxSprite;
 	var processedSongName:String = '';
 
-	override function create(){
+	override function create()
+	{
 		super.create();
 		checker = new FlxBackdrop('assets/images/ui/general/checker.png', 0, 0);
 		checker.velocity.x = 10;
@@ -123,7 +126,7 @@ class FreeplayState extends MusicBeatState{
 		icon.animation.play('regular');
 
 		particles = new FlxEmitter(0, FlxG.height + 23, 19000);
-		particles.makeParticles(12, 12,FlxColor.WHITE, 600);
+		particles.makeParticles(12, 12, FlxColor.WHITE, 600);
 		particles.width = 1780;
 		particles.height = 15;
 		particles.lifespan.set(5, 5);
@@ -143,87 +146,206 @@ class FreeplayState extends MusicBeatState{
 		FlxTween.tween(scoreText, {y: 0}, 1, {ease: FlxEase.circOut});
 		FlxTween.tween(difficultyText, {y: 110}, 1, {ease: FlxEase.circOut});
 
-		if (baseGameSongs){
-			songs.push({color: 0xC50000, name: 'Tutorial', icon: 'assets/images/icons/icon-gf.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0x6300C0, name: 'Bopeebo', icon: 'assets/images/icons/icon-dad.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0x6300C0, name: 'Fresh', icon: 'assets/images/icons/icon-dad.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0x6300C0, name: 'Dadbattle', icon: 'assets/images/icons/icon-dad.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0x120681, name: 'Spookeez', icon: 'assets/images/icons/icon-spooky.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0x120681, name: 'South', icon: 'assets/images/icons/icon-spooky.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0x120681, name: 'Monster', icon: 'assets/images/icons/icon-spooky.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0xCEC221, name: 'Pico', icon: 'assets/images/icons/icon-pico.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0xCEC221, name: 'Philly-nice', icon: 'assets/images/icons/icon-pico.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0xCEC221, name: 'Blammed', icon: 'assets/images/icons/icon-pico.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0xD80CBD, name: 'Satin Panties', icon: 'assets/images/icons/icon-mom.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0xD80CBD, name: 'High', icon: 'assets/images/icons/icon-mom.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0xD80CBD, name: 'Milf', icon: 'assets/images/icons/icon-mom.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0xA208B6, name: 'Cocoa', icon: 'assets/images/icons/icon-parents.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0xA208B6, name: 'Eggnog', icon: 'assets/images/icons/icon-parents.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0xA208B6, name: 'Winter Horrorland', icon: 'assets/images/icons/icon-parents.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0xFFB561, name: 'Senpai', icon: 'assets/images/icons/icon-senpai.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0xFFB561, name: 'Roses', icon: 'assets/images/icons/icon-senpai.png', diffs: ['Easy', 'Normal', 'Hard']});
-			songs.push({color: 0xEC1022, name: 'Thorns', icon: 'assets/images/icons/icon-spirit.png', diffs: ['Easy', 'Normal', 'Hard']});
-			//week 7 songs will be added later
+		if (baseGameSongs)
+		{
+			songs.push({
+				color: 0xC50000,
+				name: 'Tutorial',
+				icon: 'assets/images/icons/icon-gf.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0x6300C0,
+				name: 'Bopeebo',
+				icon: 'assets/images/icons/icon-dad.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0x6300C0,
+				name: 'Fresh',
+				icon: 'assets/images/icons/icon-dad.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0x6300C0,
+				name: 'Dadbattle',
+				icon: 'assets/images/icons/icon-dad.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0x120681,
+				name: 'Spookeez',
+				icon: 'assets/images/icons/icon-spooky.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0x120681,
+				name: 'South',
+				icon: 'assets/images/icons/icon-spooky.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0x120681,
+				name: 'Monster',
+				icon: 'assets/images/icons/icon-spooky.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0xCEC221,
+				name: 'Pico',
+				icon: 'assets/images/icons/icon-pico.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0xCEC221,
+				name: 'Philly-nice',
+				icon: 'assets/images/icons/icon-pico.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0xCEC221,
+				name: 'Blammed',
+				icon: 'assets/images/icons/icon-pico.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0xD80CBD,
+				name: 'Satin Panties',
+				icon: 'assets/images/icons/icon-mom.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0xD80CBD,
+				name: 'High',
+				icon: 'assets/images/icons/icon-mom.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0xD80CBD,
+				name: 'Milf',
+				icon: 'assets/images/icons/icon-mom.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0xA208B6,
+				name: 'Cocoa',
+				icon: 'assets/images/icons/icon-parents.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0xA208B6,
+				name: 'Eggnog',
+				icon: 'assets/images/icons/icon-parents.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0xA208B6,
+				name: 'Winter Horrorland',
+				icon: 'assets/images/icons/icon-parents.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0xFFB561,
+				name: 'Senpai',
+				icon: 'assets/images/icons/icon-senpai.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0xFFB561,
+				name: 'Roses',
+				icon: 'assets/images/icons/icon-senpai.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			songs.push({
+				color: 0xEC1022,
+				name: 'Thorns',
+				icon: 'assets/images/icons/icon-spirit.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+			// week 7 songs will be added later
 		}
 
-		for (mod in FileSystem.readDirectory('mods/')){
-			for (week in FileSystem.readDirectory('mods/$mod/weeks')){
-				if (StringTools.endsWith(week, '.xml')){
-					curWeekXml = Xml.parse(File.getContent('mods/$mod/weeks/$week'));
-					fast = new Fast(curWeekXml);
-					for (song in StaticGeneralUtils.getSongDataFromXml(fast)){
-						songs.push({color: StaticGeneralUtils.getWeekDataFromXml('freeplayColor', fast), name: song, icon: StaticGeneralUtils.getWeekDataFromXml('freeplayIcon', fast), diffs: StaticGeneralUtils.getWeekDataFromXml('diffs', fast)});
+		if (FileSystem.exists('mods/'))
+		{
+			for (mod in FileSystem.readDirectory('mods/'))
+			{
+				if (FileSystem.exists('mods/$mod/weeks'))
+				{
+					{
+						for (week in FileSystem.readDirectory('mods/$mod/weeks'))
+						{
+							if (StringTools.endsWith(week, '.xml'))
+							{
+								curWeekXml = Xml.parse(File.getContent('mods/$mod/weeks/$week'));
+								fast = new Fast(curWeekXml);
+								for (song in StaticGeneralUtils.getSongDataFromXml(fast))
+								{
+									songs.push({
+										color: StaticGeneralUtils.getWeekDataFromXml('freeplayColor', fast),
+										name: song,
+										icon: StaticGeneralUtils.getWeekDataFromXml('freeplayIcon', fast),
+										diffs: StaticGeneralUtils.getWeekDataFromXml('diffs', fast)
+									});
+								}
+							}
+						}
 					}
 				}
 			}
 		}
 	}
 
-	override function update(elapsed:Float) {
+	override function update(elapsed:Float)
+	{
 		super.update(elapsed);
-		if (canChangeSelection){
-		if (FlxG.keys.justPressed.UP){
-			curSelSong -= 1;
-			if (curSelSong >= songs.length)
-				curSelSong = 0;
-			if (curSelSong < 0)
-				curSelSong = songs.length - 1;
+		if (canChangeSelection)
+		{
+			if (FlxG.keys.justPressed.UP)
+			{
+				curSelSong -= 1;
+				if (curSelSong >= songs.length)
+					curSelSong = 0;
+				if (curSelSong < 0)
+					curSelSong = songs.length - 1;
 
-			trace(curSelSong);
-		}
-		if (FlxG.keys.justPressed.DOWN){
-			curSelSong += 1;
-			if (curSelSong >= songs.length)
-				curSelSong = 0;
-			if (curSelSong < 0)
-				curSelSong = songs.length - 1;
+				trace(curSelSong);
+			}
+			if (FlxG.keys.justPressed.DOWN)
+			{
+				curSelSong += 1;
+				if (curSelSong >= songs.length)
+					curSelSong = 0;
+				if (curSelSong < 0)
+					curSelSong = songs.length - 1;
 
-			trace(curSelSong);
-		}
-		if (FlxG.keys.justPressed.RIGHT){
-			curSelDiff += 1;
-			if (curSelDiff >= songs[curSelSong].diffs.length)
-				curSelDiff = 0;
-			if (curSelDiff < 0)
-				curSelDiff = songs[curSelSong].diffs.length - 1;
+				trace(curSelSong);
+			}
+			if (FlxG.keys.justPressed.RIGHT)
+			{
+				curSelDiff += 1;
+				if (curSelDiff >= songs[curSelSong].diffs.length)
+					curSelDiff = 0;
+				if (curSelDiff < 0)
+					curSelDiff = songs[curSelSong].diffs.length - 1;
 
-			trace(curSelDiff);
-		}
-		if (FlxG.keys.justPressed.LEFT){
-			curSelDiff -= 1;
-			if (curSelDiff >= songs[curSelSong].diffs.length)
-				curSelDiff = 0;
-			if (curSelDiff < 0)
-				curSelDiff = songs[curSelSong].diffs.length - 1;
+				trace(curSelDiff);
+			}
+			if (FlxG.keys.justPressed.LEFT)
+			{
+				curSelDiff -= 1;
+				if (curSelDiff >= songs[curSelSong].diffs.length)
+					curSelDiff = 0;
+				if (curSelDiff < 0)
+					curSelDiff = songs[curSelSong].diffs.length - 1;
 
-			trace(curSelDiff);
+				trace(curSelDiff);
+			}
 		}
-		
-	}
 		FlxG.camera.zoom = FlxMath.lerp(FlxG.camera.zoom, 1, 0.1);
 		processedSongName = StringTools.replace(songs[curSelSong].name, ' ', '-').toLowerCase();
 		icon.loadGraphic(songs[curSelSong].icon, true, 150, 150);
-		if (!icon.animation.exists('regular-$processedSongName')){
+		if (!icon.animation.exists('regular-$processedSongName'))
+		{
 			icon.animation.add('regular-$processedSongName', [0], 1, true, false, false);
 		}
 		icon.animation.play('regular-$processedSongName');
@@ -235,31 +357,39 @@ class FreeplayState extends MusicBeatState{
 		arrowUpShade.color = FlxColor.interpolate(arrowUpShade.color, songs[curSelSong].color, 0.1);
 		gradient.color = FlxColor.interpolate(gradient.color, songs[curSelSong].color, 0.1);
 		checker.color = FlxColor.interpolate(checker.color, songs[curSelSong].color, 0.1);
-		if (canSelect){
-		if (FlxG.keys.justPressed.ENTER){
-			canChangeSelection = false;
-			canSelect = false;
-			if (songs[curSelSong].diffs[curSelDiff] != 'Normal'){
-				PlayState.SONG = Song.loadFromJson('$processedSongName-${songs[curSelSong].diffs[curSelDiff]}', '$processedSongName');
-			}else{
-				if (songs[curSelSong].diffs[curSelDiff] == 'Normal'){
-					PlayState.SONG = Song.loadFromJson('$processedSongName', '$processedSongName');
+		if (canSelect)
+		{
+			if (FlxG.keys.justPressed.ENTER)
+			{
+				canChangeSelection = false;
+				canSelect = false;
+				if (songs[curSelSong].diffs[curSelDiff] != 'Normal')
+				{
+					PlayState.SONG = Song.loadFromJson('$processedSongName-${songs[curSelSong].diffs[curSelDiff]}', '$processedSongName');
 				}
+				else
+				{
+					if (songs[curSelSong].diffs[curSelDiff] == 'Normal')
+					{
+						PlayState.SONG = Song.loadFromJson('$processedSongName', '$processedSongName');
+					}
+				}
+				if (PlayState.SONG == null)
+				{
+					throw 'Chart not found! Chart: "$processedSongName-${songs[curSelSong].diffs[curSelDiff].toLowerCase()}.json"';
+				}
+				PlayState.isStoryMode = false;
+				PlayState.storyDifficulty = curSelDiff;
+				FlxG.sound.playMusic('assets/sounds/confirmMenu.ogg', 1.0, false);
+				FlxG.camera.flash();
+				FlxG.camera.zoom = 0.1;
+				canSelect = false;
+				new FlxTimer().start(1.7, function(tmr:FlxTimer)
+				{
+					FlxG.sound.music.stop();
+					FlxG.switchState(new PlayState());
+				});
 			}
-			if (PlayState.SONG == null){
-				throw 'Chart not found! Chart: "$processedSongName-${songs[curSelSong].diffs[curSelDiff].toLowerCase()}.json"';
-			}
-			PlayState.isStoryMode = false;
-			PlayState.storyDifficulty = curSelDiff;
-			FlxG.sound.playMusic('assets/sounds/confirmMenu.ogg', 1.0, false);
-			FlxG.camera.flash();
-			FlxG.camera.zoom = 0.1;
-			canSelect = false;
-			new FlxTimer().start(1.7, function(tmr:FlxTimer) {
-				FlxG.sound.music.stop();
-				FlxG.switchState(new PlayState());
-			});
 		}
-	}
 	}
 }

@@ -38,14 +38,14 @@ class Song
 		this.bpm = bpm;
 	}
 
-	public static function loadFromJson(jsonInput:String, ?folder:String, ?modfolder:String):SwagSong
+	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
 	{
 		var rawJson:String = '';
 		try{
 			trace('assets/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json');
 			rawJson = File.getContent('assets/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim();
 		}catch(e){
-			rawJson = File.getContent('mods/${StaticModUtils.getModName(modfolder)}songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim();
+			rawJson = File.getContent('mods/${StaticModUtils.getModName(folder)}/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim();
 		}
 
 		while (!rawJson.endsWith("}"))

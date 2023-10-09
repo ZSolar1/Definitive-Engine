@@ -78,15 +78,10 @@ class StaticModUtils
 	{
 		if (FileSystem.exists('mods/'))
 		{
-			for (folder in FileSystem.readDirectory('mods/'))
-			{
-				if (folder != 'packagedMods')
-				{
-					if (FileSystem.exists('mods/$folder/songs/${song}'))
-					{
-						return folder;
-						break;
-					}
+			for (mod in FileSystem.readDirectory('mods/')){
+				if (FileSystem.exists('mods/$mod/songs/$song')){
+					return mod;
+					break;
 				}
 			}
 		}

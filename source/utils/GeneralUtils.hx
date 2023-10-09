@@ -48,11 +48,15 @@ class GeneralUtils
 		}
 		if (data == 'freeplayColor')
 		{
-			var weekDataXml = theFast.node.freeplayColor;
+			var weekDataXml = theFast.node.weekData;
 			if (weekDataXml.has.freeplayColor)
+			{
 				return FlxColor.fromString(weekDataXml.att.freeplayColor);
+			}
 			else
+			{
 				return 0x000000;
+			}
 		}
 
 		if (data == 'diffs')
@@ -90,11 +94,11 @@ class GeneralUtils
 
 			return songs;
 		}
-        if (data == 'freeplayIcon')
-            {
-                var weekDataXml = theFast.node.icon;
-                return weekDataXml.att.icon;
-            }
+		if (data == 'freeplayIcon')
+		{
+			var weekDataXml = theFast.node.icon;
+			return weekDataXml.att.icon;
+		}
 		if (data == 'chars')
 		{
 			var weekDataXml = theFast.node.chars;
@@ -193,6 +197,18 @@ class StaticGeneralUtils
 
 			return songs;
 		}
+		if (data == 'freeplayColor')
+		{
+			var weekDataXml = theFast.node.weekData;
+			if (weekDataXml.has.freeplayColor)
+			{
+				return FlxColor.fromString(weekDataXml.att.freeplayColor);
+			}
+			else
+			{
+				return 0x000000;
+			}
+		}
 		if (data == 'diffs')
 		{
 			var weekDataXml = theFast.node.diffs;
@@ -214,11 +230,11 @@ class StaticGeneralUtils
 
 			return diffs;
 		}
-        if (data == 'freeplayIcon')
-            {
-                var weekDataXml = theFast.node.icon;
-                return weekDataXml.att.icon;
-            }
+		if (data == 'freeplayIcon')
+		{
+			var weekDataXml = theFast.node.icon;
+			return weekDataXml.att.icon;
+		}
 		if (data == 'chars')
 		{
 			var weekDataXml = theFast.node.chars;
