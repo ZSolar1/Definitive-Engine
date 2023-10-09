@@ -14,7 +14,9 @@ typedef AnimData = {
 	var prefix:String;
 	var fps:Int;
 	var looped:Bool;
-	var offsets:Array<Array<String>>;
+	var flipX:Bool;
+	var flipY:Bool;
+	var offsets:Array<Float>;
 }
 
 typedef CharData =
@@ -23,8 +25,6 @@ typedef CharData =
 	var xmlPath:String;
 	var name:String;
 	var anims:Array<AnimData>;
-	var extraAnims:Array<String>;
-	var extraAnimOffsets:Array<Array<String>>;
 }
 
 class Character extends FlxSprite
@@ -528,7 +528,7 @@ class Character extends FlxSprite
 					playAnim('idle');
 			}
 		}
-		/*else
+		else
 		{
 			for (mod in FileSystem.readDirectory('mods/'))
 			{
@@ -548,47 +548,12 @@ class Character extends FlxSprite
 			}
 			trace(characterData.pngPath);
 			frames = FlxAtlasFrames.fromSparrow(characterData.pngPath, characterData.xmlPath);
-			animation.addByPrefix('idle', characterData.anims[0].prefix, 24, false);
-			animation.addByPrefix('singUP', characterData.anims[1].prefix, 24, false);
-			animation.addByPrefix('singDOWN', characterData.anims[2].prefix, 24, false);
-			animation.addByPrefix('singLEFT', characterData.anims[3].prefix, 24, false);
-			animation.addByPrefix('singRIGHT', characterData.anims[4].prefix, 24, false);
-
-			if (characterData.anims[5].prefix != null)
-				animation.addByPrefix('singUP-alt', characterData.anims[5].prefix, 24, false);
-			
-			if (characterData.anims[6].prefix != null)
-				animation.addByPrefix('singDOWN-alt', characterData.anims[6].prefix, 24, false);
-
-			if (characterData.anims[7].prefix != null)
-				animation.addByPrefix('singLEFT-alt', characterData.anims[7].prefix, 24, false);
-
-			if (characterData.anims[8].prefix != null)
-				animation.addByPrefix('singRIGHT-alt', characterData.anims[8].prefix, 24, false);
-
-			addOffset('idle', characterData.anims.offsets[0][0], characterData.anims.offsets[0][1]);
-			addOffset("singUP", characterData.anims.offsets[1][1], characterData.anims.offsets[1][1]);
-			addOffset("singRIGHT", characterData.anims.offsets[2][1], characterData.anims.offsets[2][1]);
-			addOffset("singLEFT", characterData.anims.offsets[3][1], characterData.anims.offsets[3][1]);
-			addOffset("singDOWN", characterData.anims.offsets[4][1], characterData.anims.offsets[4][1]);
-			if (characterData.animsOffsets[5] != null)
-				addOffset("singUP-alt", characterData.anims.offsets[5][1], characterData.anims.offsets[5][1]);
-
-			if (characterData.animsOffsets[6] != null)
-			addOffset("singRIGHT-alt", characterData.anims.offsets[6][1], characterData.anims.offsets[6][1]);
-
-			if (characterData.animsOffsets[7] != null)
-			addOffset("singLEFT-alt", characterData.anims.offsets[7][1], characterData.anims.offsets[7][1]);
-
-			if (characterData.animsOffsets[8] != null)
-			addOffset("singDOWN-alt", characterData.anims.offsets[8][1], characterData.anims.offsets[8][1]);
-
-			for (extraAnim in 0...characterData.extraAnims.length){
-				animation.addByPrefix()
+			for (anim in 0...characterData.anims.length){
+				animation.addByPrefix(characterData.anims[anim].name, characterData.anims[anim].prefix, characterData.anims[anim].fps, characterData.anims[anim].looped, characterData.anims[anim].flipX, characterData.anims[anim].flipY);
+				addOffset(characterData.anims[anim].name, characterData.anims[anim].offsets[0], characterData.anims[anim].offsets[1]);
 			}
-
 			playAnim('idle');
-		}*/
+		}
 
 		dance();
 
