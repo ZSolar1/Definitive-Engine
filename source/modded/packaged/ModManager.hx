@@ -94,7 +94,7 @@ class ModManager extends FlxState
 		var fullOutputDir = '$realOutputDir/$processedName';
 
 		// create the output file
-		var out = sys.io.File.write(fullOutputDir, true);
+		var out = sys.io.File.write(fullOutputDir, false);
 
 		// write the mod file
 		var mod = new haxe.zip.Writer(out);
@@ -102,11 +102,11 @@ class ModManager extends FlxState
 
 		var encoded = weakEncode(File.getContent(fullOutputDir));
 		var finalFile:FileOutput;
-		finalFile = File.write(fullOutputDir, true);
+		finalFile = File.write(fullOutputDir, false);
 		finalFile.writeString(encoded);
 
-		ogState = FlxG.state;
-		openSubState(new ModPackager(fullOutputDir, ogState));
+		//ogState = FlxG.state;
+		//openSubState(new ModPackager(fullOutputDir, ogState));
 	}
 
 	public function weakEncode(string:String){ //very basic, ik

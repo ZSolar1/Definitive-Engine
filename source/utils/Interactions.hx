@@ -58,6 +58,29 @@ class Interactions
 			return false;
 		}
 	}
+
+	public function clickingObject(object:FlxSprite)
+		{
+			if (FlxG.mouse.x > object.x
+				&& FlxG.mouse.x < object.x + object.width
+				&& FlxG.mouse.y > object.y
+				&& FlxG.mouse.y < object.y + object.height
+				&& object.alive)
+			{
+				if (FlxG.mouse.pressed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
 }
 
 class StaticInteractions
@@ -115,4 +138,27 @@ class StaticInteractions
 			return false;
 		}
 	}
+
+	public static function clickingObject(object:FlxSprite)
+		{
+			if (FlxG.mouse.x > object.x
+				&& FlxG.mouse.x < object.x + object.width
+				&& FlxG.mouse.y > object.y
+				&& FlxG.mouse.y < object.y + object.height
+				&& object.alive)
+			{
+				if (FlxG.mouse.pressed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
 }

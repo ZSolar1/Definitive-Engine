@@ -95,8 +95,6 @@ class PlayState extends MusicBeatState
 
 	private var iconP1:HealthIcon;
 	private var iconP2:HealthIcon;
-	private var camHUD:FlxCamera;
-	private var camGame:FlxCamera;
 
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 
@@ -131,6 +129,9 @@ class PlayState extends MusicBeatState
 
 	var inCutscene:Bool = false;
 
+	public static var camHUD:FlxCamera;
+	public static var camGame:FlxCamera;
+
 	public static var luaArray:Array<ShmoovinLua> = [];
 	public static var hscriptArray:Array<ShmoovinHScript> = [];
 	public static var modName:String;
@@ -138,7 +139,6 @@ class PlayState extends MusicBeatState
 	override public function create()
 	{
 		instance = this;
-		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
@@ -147,7 +147,6 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.add(camHUD);
 
 		FlxCamera.defaultCameras = [camGame];
-
 		persistentUpdate = true;
 		persistentDraw = true;
 
@@ -719,7 +718,7 @@ class PlayState extends MusicBeatState
 		// FlxG.camera.alpha = 0.7;
 		// UI_camera.zoom = 1;
 
-		// cameras = [FlxG.cameras.list[1]];
+		//cameras = [FlxG.cameras.list[1]];
 
 		
 		if (FileSystem.exists('mods/$modName/songs/${SONG.song}/assets/modcharts/')){
@@ -1034,11 +1033,13 @@ class PlayState extends MusicBeatState
 		}
 		FlxG.sound.music.onComplete = endSong;
 		vocals.play();
-		//ModchartFuncs.startMod('test', 'DrunkXModifier', '', -1, this);
-		//playfieldRenderer.modifierTable.reconstructTable();
-		//playfieldRenderer.modifierTable.tweenModifier('test', 10, 1,'circOut', modcharting.Modifier.beat);
-		//ModchartFuncs.tweenModifier('test', 10, 1, 'circOut', this);
-		//ModchartFuncs.ease(2, 1, 'circOut', '10, test', this);
+		/*modchart example in source:
+		ModchartFuncs.startMod('test', 'DrunkZModifier', '', -1, this);
+		ModchartFuncs.startMod('test1', 'BeatXModifier', '', -1, this);
+		playfieldRenderer.modifierTable.reconstructTable();
+		playfieldRenderer.modifierTable.tweenModifier('test', 10, 1,'circOut', modcharting.Modifier.beat);
+		playfieldRenderer.modifierTable.tweenModifier('test1', 2, 1,'circOut', modcharting.Modifier.beat);
+		*/
 	}
 
 	var debugNum:Int = 0;

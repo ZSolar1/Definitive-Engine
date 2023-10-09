@@ -93,7 +93,7 @@ class StaticModUtils
 		return '';
 	}
 
-	public static function getMods(getWeeks:Bool, returnPaths:Bool, ?pathsOnly:Bool):Dynamic
+	public static function getMods(getWeeks:Bool, returnPaths:Bool, ?pathsOnly:Bool):Dynamic //DON'T USE THIS FUNCTION, PLEASE
 	{
 		var ret:Array<String> = [];
 		for (folder in FileSystem.readDirectory('mods/'))

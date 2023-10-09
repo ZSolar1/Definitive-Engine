@@ -38,19 +38,19 @@ class Song
 		this.bpm = bpm;
 	}
 
-	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
+	public static function loadFromJson(jsonInput:String, ?folder:String, ?modfolder:String):SwagSong
 	{
 		var rawJson:String = '';
 		try{
-			rawJson = File.getContent('assets/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim(); //changed Assets.getText to File.getContent, the getText wasnt working. idk man :/
+			trace('assets/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json');
+			rawJson = File.getContent('assets/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim();
 		}catch(e){
-			rawJson = File.getContent('mods/${StaticModUtils.getModName(folder.toLowerCase())}/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim();
+			rawJson = File.getContent('mods/${StaticModUtils.getModName(modfolder)}songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim();
 		}
 
 		while (!rawJson.endsWith("}"))
 		{
 			rawJson = rawJson.substr(0, rawJson.length - 1);
-			// LOL GOING THROUGH THE BULLSHIT TO CLEAN IDK WHATS STRANGE
 		}
 
 		// FIX THE CASTING ON WINDOWS/NATIVE

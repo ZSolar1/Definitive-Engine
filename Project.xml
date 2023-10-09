@@ -45,7 +45,6 @@
 	<assets path="assets/songs" />
 	<assets path="assets/fonts" />
 	<assets path="assets/songs" />
-	<assets path="mods" />
 	<assets path='art/readme.txt' rename='do NOT readme.txt' />
 	<!-- <template path='mods' /> -->
 	
@@ -72,6 +71,7 @@
 	<haxelib name="flixel-addons" />
 	<haxelib name="filesystemhelper" />
 	<haxelib name="hscript" />
+	<haxelib name="tjson" />
 	<haxelib name="linc_luajit" />
 
 	<!--In case you want to use the ui package-->

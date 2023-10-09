@@ -1,5 +1,6 @@
 package states;
 
+import utils.GeneralUtils;
 import utils.GeneralUtils.StaticGeneralUtils;
 import utils.ModUtils.StaticModUtils;
 import haxe.xml.Fast;
@@ -48,8 +49,8 @@ class StoryMenuState extends MusicBeatState
 		['senpai', 'bf', 'gf']
 	];
 
-	var weekNames:Array<String> = [
-		"",
+	public var weekNames:Array<String> = [
+		"Funky Begginings",
 		"Daddy Dearest",
 		"Spooky Month",
 		"PICO",
@@ -75,10 +76,10 @@ class StoryMenuState extends MusicBeatState
 	var rightArrow:FlxSprite;
 
 	// for mods
-	var moddedWeeks:Array<Array<String>> = [];
+	var moddedWeeks:Array<String> = [];
 	var curWeekFile:String = '';
 	var curWeekXml:Xml;
-	var fast:Fast; //idc if its deprecated, it still works okay!?
+	var fast:Fast; // idc if its deprecated, it still works okay!?
 	var moddedSongArray:Array<String> = [];
 	var moddedWeekCharacters:Array<String> = [];
 
@@ -122,29 +123,42 @@ class StoryMenuState extends MusicBeatState
 		grpLocks = new FlxTypedGroup<FlxSprite>();
 		add(grpLocks);
 
-		// week loading.
-		//moddedWeeks = [StaticModUtils.getMods(true, false), StaticModUtils.getMods(true, true, true)];
-		//trace(StaticGeneralUtils.removeBracketsFromArrayValue(moddedWeeks[0][1]));
-		//trace(moddedWeeks[0]);
+		// get each mods week xmls
+		if (FileSystem.exists('mods'))
+		{
+			for (mod in FileSystem.readDirectory('mods'))
+			{
+				if (mod != 'packagedMods')
+				{
+					if (FileSystem.exists('mods/$mod/weeks'))
+					{
+						for (modWeek in FileSystem.readDirectory('mods/$mod/weeks'))
+						{
+							if (StringTools.endsWith(modWeek, '.xml'))
+							{
+								moddedWeeks.push('mods/$mod/weeks/$modWeek');
+							}
+						}
+					}
+				}
+			}
+		}
 
-		//for (moddedWeek in moddedWeeks)
-		//{
-			//curWeekFile = File.getContent(StaticGeneralUtils.removeBracketsFromArrayValue(moddedWeek[1]) + moddedWeek[0]);
-			curWeekFile = File.getContent('mods/exampleMod/weeks/testWeek.xml');
+		//push each mods week data to the lists
+		for (moddedWeek in moddedWeeks)
+		{
+			curWeekFile = File.getContent(moddedWeek);
 			curWeekXml = Xml.parse(curWeekFile);
 			fast = new Fast(curWeekXml);
-			weekData.push(getWeekDataFromXml('songs', fast));
+			weekData.push(StaticGeneralUtils.getWeekDataFromXml('songs', fast));
 			trace(weekData);
-			weekCharacters.push(getWeekDataFromXml('chars', fast));
+			weekCharacters.push(StaticGeneralUtils.getWeekDataFromXml('chars', fast));
 			trace(weekCharacters);
-			weekNames.push(getWeekDataFromXml('weekName', fast));
+			weekNames.push(StaticGeneralUtils.getWeekDataFromXml('weekName', fast));
 			trace(weekNames);
-			weekUnlocked.push(stringToBool(getWeekDataFromXml('unlocked', fast)));
+			weekUnlocked.push(StaticGeneralUtils.stringToBool(StaticGeneralUtils.getWeekDataFromXml('unlocked', fast)));
 			trace(weekUnlocked);
-		//}
-
-		// trace("Line 70");
-
+		}
 		for (i in 0...weekData.length)
 		{
 			var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, i);
@@ -168,8 +182,6 @@ class StoryMenuState extends MusicBeatState
 				grpLocks.add(lock);
 			}
 		}
-
-		// trace("Line 96");
 
 		for (char in 0...3)
 		{
@@ -202,8 +214,6 @@ class StoryMenuState extends MusicBeatState
 		difficultySelectors = new FlxGroup();
 		add(difficultySelectors);
 
-		// trace("Line 124");
-
 		leftArrow = new FlxSprite(grpWeekText.members[0].x + grpWeekText.members[0].width + 10, grpWeekText.members[0].y + 10);
 		leftArrow.frames = ui_tex;
 		leftArrow.animation.addByPrefix('idle', "arrow left");
@@ -228,8 +238,6 @@ class StoryMenuState extends MusicBeatState
 		rightArrow.animation.play('idle');
 		difficultySelectors.add(rightArrow);
 
-		// trace("Line 150");
-
 		add(yellowBG);
 		add(grpWeekCharacters);
 
@@ -244,84 +252,12 @@ class StoryMenuState extends MusicBeatState
 
 		updateText();
 
-		// trace("Line 165");
-
 		super.create();
 	}
 
-	function getWeekDataFromXml(data:String, theFast:Fast):Dynamic
-		{
-			if (data == 'weekName')
-				{
-					var weekDataXml = theFast.node.weekData;
-					if (weekDataXml.has.weekName)
-						return weekDataXml.att.weekName;
-					else
-						return 'No Week Name';
-				}
-			if (data == 'songs')
-				{
-					var weekDataXml = theFast.node.songs;
-					var songs:Array<String> = [];
-					songs.push(weekDataXml.att.song1);
+	
 
-					if (weekDataXml.att.song2 != "")
-						songs.push(weekDataXml.att.song2);
-
-					if (weekDataXml.att.song3 != "")
-						songs.push(weekDataXml.att.song3);
-
-					return songs;
-				}
-			if (data == 'chars')
-				{
-					var weekDataXml = theFast.node.chars;
-					var chars:Array<String> = [];
-					if (weekDataXml.has.char1)
-						chars.push(weekDataXml.att.char1);
-					else
-						return null;
-					if (weekDataXml.has.char2)
-						chars.push(weekDataXml.att.char2);
-					else
-						return null;
-					if (weekDataXml.has.char3)
-						chars.push(weekDataXml.att.char3);
-					else
-						return null;
-
-					return chars;
-				}
-			if (data == 'unlocked')
-				{
-					var weekDataXml = theFast.node.weekData;
-					if (weekDataXml.has.unlocked)
-						return weekDataXml.att.unlocked;
-					else
-						return 'true';
-				}
-			return Dynamic;
-		}
-
-	function stringToBool(str:String)
-	{
-		/*var int:Int = Std.parseInt(str);
-			if (int > 0)
-				return true;
-
-			if (int <= 0)
-				return false;
-
-			return false; */
-
-		if (['true', 'false'].contains(str))
-			if (str == 'true')
-				return true;
-			else
-				return false;
-
-		return false;
-	}
+	
 
 	override function update(elapsed:Float)
 	{
