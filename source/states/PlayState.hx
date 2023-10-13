@@ -59,8 +59,6 @@ class PlayState extends MusicBeatState
 	public static var storyDifficulty:Int = 1;
 	public static var instance:PlayState;
 
-	var halloweenLevel:Bool = false;
-
 	private var vocals:FlxSound;
 
 	private var dad:Character;
@@ -69,6 +67,7 @@ class PlayState extends MusicBeatState
 
 	private var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
+	private var noteSplashes:FlxTypedGroup<NoteSplash>;
 
 	private var strumLine:FlxSprite;
 	private var curSection:Int = 0;
@@ -186,7 +185,6 @@ class PlayState extends MusicBeatState
 		if (SONG.song.toLowerCase() == 'spookeez' || SONG.song.toLowerCase() == 'monster' || SONG.song.toLowerCase() == 'south')
 		{
 			curStage = "spooky";
-			halloweenLevel = true;
 
 			var hallowTex = FlxAtlasFrames.fromSparrow('assets/images/halloween_bg.png', 'assets/images/halloween_bg.xml');
 
@@ -654,10 +652,16 @@ class PlayState extends MusicBeatState
 		generateSong(SONG.song);
 
 		playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
-		playfieldRenderer.cameras = [camHUD];
 		add(playfieldRenderer);
 
 		// add(strumLine);
+		noteSplashes = new FlxTypedGroup<NoteSplash>();
+
+		var noteSplash:NoteSplash = new NoteSplash(0, 0, 0);
+		noteSplashes.add(noteSplash);
+		noteSplash.alpha = 0.1;
+
+		add(noteSplashes);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 
@@ -707,18 +711,14 @@ class PlayState extends MusicBeatState
 
 		strumLineNotes.cameras = [camHUD];
 		notes.cameras = [camHUD];
+		playfieldRenderer.cameras = [camHUD];
+		noteSplashes.cameras = [camHUD];
 		healthBar.cameras = [camHUD];
 		healthBarBG.cameras = [camHUD];
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
-
-		// if (SONG.song == 'South')
-		// FlxG.camera.alpha = 0.7;
-		// UI_camera.zoom = 1;
-
-		//cameras = [FlxG.cameras.list[1]];
 
 		
 		if (FileSystem.exists('mods/$modName/songs/${SONG.song}/assets/modcharts/')){
@@ -1751,7 +1751,7 @@ class PlayState extends MusicBeatState
 
 	var endingSong:Bool = false;
 
-	private function popUpScore(strumtime:Float):Void
+	private function popUpScore(strumtime:Float, note:Note):Void
 	{
 		var noteDiff:Float = Math.abs(strumtime - Conductor.songPosition);
 		// boyfriend.playAnim('hey');
@@ -1784,6 +1784,12 @@ class PlayState extends MusicBeatState
 			daRating = 'good';
 			score = 200;
 		}
+		if (daRating == 'sick')
+			{
+				var noteSplash:NoteSplash = noteSplashes.recycle(NoteSplash);
+				noteSplash = new NoteSplash(note.x, note.y, note.noteData);
+				noteSplashes.add(noteSplash);
+			}
 
 		songScore += score;
 
@@ -2171,7 +2177,7 @@ class PlayState extends MusicBeatState
 		{
 			if (!note.isSustainNote)
 			{
-				popUpScore(note.strumTime);
+				popUpScore(note.strumTime, note);
 				combo += 1;
 			}
 

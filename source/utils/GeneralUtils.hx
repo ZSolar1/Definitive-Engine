@@ -139,6 +139,34 @@ class GeneralUtils
 
 		return false;
 	}
+	
+	public static function getNoteNameFromDir(dir:Int){
+		if (dir > 3){
+			return 'Left';
+		}else{
+			if (dir == 0){
+				return 'Left';
+			}
+			if (dir == 1){
+				return 'Down';
+			}
+			if (dir == 2){
+				return 'Up';
+			}
+			if (dir == 3){
+				return 'Right';
+			}
+		}
+		return '';
+	}
+
+	public static function getNoteDirFromName(name:String){
+		if (VariableHub.NoteStuff.allStaticNoteTypes.exists(name)){
+			return VariableHub.NoteStuff.allStaticNoteTypes.get(name);
+		}else{
+			return 0;
+		}
+	}
 }
 
 class StaticGeneralUtils
@@ -274,5 +302,33 @@ class StaticGeneralUtils
 				return false;
 
 		return false;
+	}
+
+	public static function getNoteNameFromDir(dir:Int){
+		if (dir > 3){
+			return 'Left';
+		}else{
+			if (dir == 0){
+				return 'Left';
+			}
+			if (dir == 1){
+				return 'Down';
+			}
+			if (dir == 2){
+				return 'Up';
+			}
+			if (dir == 3){
+				return 'Right';
+			}
+		}
+		return '';
+	}
+
+	public static function getNoteDirFromName(name:String){
+		if (VariableHub.NoteStuff.allStaticNoteTypes.exists(name)){
+			return VariableHub.NoteStuff.allStaticNoteTypes.get(name);
+		}else{
+			return 0;
+		}
 	}
 }
