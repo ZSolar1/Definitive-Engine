@@ -34,7 +34,7 @@ class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongData> = [];
 	var curSelSong:Int = 0;
-	var curSelDiff:Int = 0;
+	var curSelDiff:Int = 1;
 	var baseGameSongs:Bool = true;
 	var canChangeSelection:Bool = true;
 	var curWeekXml:Xml;
@@ -75,7 +75,7 @@ class FreeplayState extends MusicBeatState
 		scoreText.borderSize = 6;
 		scoreText.borderColor = FlxColor.BLACK;
 		add(scoreText);
-		difficultyText = new FlxText(0, -200, 1000, '< Easy >', 40);
+		difficultyText = new FlxText(0, -200, 1000, '< Normal >', 40);
 		difficultyText.alignment = CENTER;
 		difficultyText.screenCenter(X);
 		difficultyText.font = 'assets/fonts/vcr.ttf';
@@ -264,6 +264,19 @@ class FreeplayState extends MusicBeatState
 			});
 			// week 7 songs will be added later
 		}
+		if (songs == []){
+			songs.push({
+				color: 0xC50000,
+				name: 'Tutorial',
+				icon: 'assets/images/icons/icon-gf.png',
+				diffs: ['Easy', 'Normal', 'Hard']
+			});
+		}
+
+		if (!FlxG.sound.music.playing)
+			{
+				FlxG.sound.playMusic('assets/music/freakyMenu' + TitleState.soundExt);
+			}
 
 		if (FileSystem.exists('mods/'))
 		{
@@ -380,7 +393,7 @@ class FreeplayState extends MusicBeatState
 				}
 				PlayState.isStoryMode = false;
 				PlayState.storyDifficulty = curSelDiff;
-				FlxG.sound.playMusic('assets/sounds/confirmMenu.ogg', 1.0, false);
+				FlxG.sound.play('assets/sounds/confirmMenu' + TitleState.soundExt);
 				FlxG.camera.flash();
 				FlxG.camera.zoom = 0.1;
 				canSelect = false;
@@ -390,6 +403,10 @@ class FreeplayState extends MusicBeatState
 					FlxG.switchState(new PlayState());
 				});
 			}
+		}
+		if (FlxG.keys.justPressed.ESCAPE){
+			FlxG.sound.play('assets/sounds/cancelMenu' + TitleState.soundExt);
+			FlxG.switchState(new MainMenuState());
 		}
 	}
 }

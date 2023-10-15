@@ -1,4 +1,4 @@
-package;
+package stateHelpers.playstate;
 
 import flixel.graphics.frames.FlxAtlasFrames;
 import utils.SkinUtils.StaticSkinUtils;
