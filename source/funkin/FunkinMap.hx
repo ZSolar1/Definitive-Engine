@@ -1,6 +1,0 @@
-package funkin;
-
-class FunkinMapUtil
-{
-
-}
