@@ -56,19 +56,19 @@ class Gameplay extends MusicBeatState{
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		if (controls.UP_P)
+		if (KeyMgr.justPressed('Up'))
 		{
 			changeCurSelected(-1);
 		}
-		if (controls.DOWN_P)
+		if (KeyMgr.justPressed('Down'))
 		{
 			changeCurSelected(1);
 		}
-		if (controls.BACK)
+		if (KeyMgr.justPressed('Cancel'))
 		{
 			FlxG.switchState(new states.OptionsState());
 		}
-		if (controls.ACCEPT)
+		if (KeyMgr.justPressed('Confirm'))
 		{
 			switch (options[curSel].name){
 				case 'Ghost Tapping':
