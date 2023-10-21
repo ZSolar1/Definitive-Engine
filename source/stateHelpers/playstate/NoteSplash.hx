@@ -1,4 +1,4 @@
-package stateHelpers.playstate;
+package statehelpers.playstate;
 
 import flixel.graphics.frames.FlxAtlasFrames;
 import utils.SkinUtils.StaticSkinUtils;
@@ -15,8 +15,8 @@ class NoteSplash extends FlxSprite
 		frames = FlxAtlasFrames.fromSparrow(StaticSkinUtils.getSkinnedAsset('noteSplashes.png', 'assets/images/noteSplashes.png', 'images', 'noteStuff'),
 			StaticSkinUtils.getSkinnedAsset('noteSplashes.xml', 'assets/images/noteSplashes.xml', 'images', 'noteStuff'));
 	
-		trace(StaticSkinUtils.getSkinnedAsset('noteSplashes.png', 'assets/images/noteSplashes.png', 'images', 'noteStuff'));
-		trace(StaticSkinUtils.getSkinnedAsset('noteSplashes.xml', 'assets/images/noteSplashes.xml', 'images', 'noteStuff'));
+		/*trace(StaticSkinUtils.getSkinnedAsset('noteSplashes.png', 'assets/images/noteSplashes.png', 'images', 'noteStuff'));
+		trace(StaticSkinUtils.getSkinnedAsset('noteSplashes.xml', 'assets/images/noteSplashes.xml', 'images', 'noteStuff'));*/
 
 		animation.addByPrefix('note1-0', 'note impact 1 down', 24, false);
 		animation.addByPrefix('note2-0', 'note impact 1 up', 24, false);

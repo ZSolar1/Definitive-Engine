@@ -1,6 +1,5 @@
 package states;
 
-import Controls.Control;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
@@ -83,12 +82,6 @@ class PauseSubState extends MusicBeatSubstate
 				case "Exit to menu":
 					FlxG.switchState(new MainMenuState());
 			}
-		}
-
-		if (FlxG.keys.justPressed.J)
-		{
-			// for reference later!
-			// PlayerSettings.player1.controls.replaceBinding(Control.LEFT, Keys, FlxKey.J, null);
 		}
 	}
 

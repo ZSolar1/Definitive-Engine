@@ -1,4 +1,4 @@
-package stateHelpers.playstate;
+package statehelpers.playstate;
 
 class FullCombo{
     public var id:Int = 0;

@@ -68,7 +68,7 @@ class PlayState extends MusicBeatState
 
 	private var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
-	private var noteSplashes:FlxTypedGroup<NoteSplash>;
+	private var noteSplashes:FlxTypedGroup<statehelpers.playstate.NoteSplash>;
 
 	private var strumLine:FlxSprite;
 	private var curSection:Int = 0;
@@ -121,7 +121,7 @@ class PlayState extends MusicBeatState
 	var score:Int = 0;
 	var scoreTxt:FlxText;
 	var rating:String = 'N/A';
-	var curFC:FullCombo;
+	var curFC:statehelpers.playstate.FullCombo;
 	var hitFirstNote:Bool = false;
 	var misses:Int = 0;
 	var finalAccuracy:Float = 0.0;
@@ -148,7 +148,7 @@ class PlayState extends MusicBeatState
 	override public function create()
 	{
 		instance = this;
-		curFC = new FullCombo(0);
+		curFC = new statehelpers.playstate.FullCombo(0);
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
@@ -666,9 +666,9 @@ class PlayState extends MusicBeatState
 		add(playfieldRenderer);
 
 		// add(strumLine);
-		noteSplashes = new FlxTypedGroup<NoteSplash>();
+		noteSplashes = new FlxTypedGroup<statehelpers.playstate.NoteSplash>();
 
-		var noteSplash:NoteSplash = new NoteSplash(0, 0, 0);
+		var noteSplash:statehelpers.playstate.NoteSplash = new statehelpers.playstate.NoteSplash(0, 0, 0);
 		noteSplashes.add(noteSplash);
 		noteSplash.alpha = 0.1;
 
@@ -1878,8 +1878,8 @@ class PlayState extends MusicBeatState
 			{
 				curFC.setFC(0);
 			}
-			var noteSplash:NoteSplash = noteSplashes.recycle(NoteSplash);
-			noteSplash = new NoteSplash(note.x, note.y, note.noteData);
+			var noteSplash:statehelpers.playstate.NoteSplash = noteSplashes.recycle(statehelpers.playstate.NoteSplash);
+			noteSplash = new statehelpers.playstate.NoteSplash(note.x, note.y, note.noteData);
 			noteSplashes.add(noteSplash);
 		}
 		notesHit += 1;
@@ -2070,8 +2070,11 @@ class PlayState extends MusicBeatState
 									if (controlArray[ignoreList[shit]])
 										inIgnoreList = true;
 								}
-								if (!inIgnoreList)
-									badNoteCheck();
+								if (!inIgnoreList){
+									if (!SettingContainer.ghostTapping){
+										badNoteCheck();
+									}
+								}
 							}
 						}
 					}
@@ -2122,7 +2125,9 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				badNoteCheck();
+				if (!SettingContainer.ghostTapping){
+					badNoteCheck();
+				}
 			}
 		}
 
@@ -2259,7 +2264,9 @@ class PlayState extends MusicBeatState
 			goodNoteHit(note);
 		else
 		{
-			badNoteCheck();
+			if (!SettingContainer.ghostTapping){
+				badNoteCheck();
+			}
 		}
 	}
 
@@ -2274,9 +2281,7 @@ class PlayState extends MusicBeatState
 			}
 
 			if (note.noteData >= 0)
-				health += 0.023;
-			else
-				health += 0.004;
+				health += 0.037;
 
 			switch (note.noteData)
 			{
