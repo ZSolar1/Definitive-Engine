@@ -1861,7 +1861,7 @@ class PlayState extends MusicBeatState
 			theScore = 100;
 			noteRating = 0.5;
 		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.2)
+		else if (noteDiff > Conductor.safeZoneOffset * 0.3)
 		{
 			if (curFC.id != 2 && curFC.id != 3 && curFC.id != 4)
 			{
