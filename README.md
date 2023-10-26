@@ -11,26 +11,27 @@
 
 
 - ## What Features does this engine have?
-	1. Light CPU Strums (Opponent notes glow when they hit a note)
-	2. Rating added to the score text
-	3.  Accuracy added to the score text
-	4. Health Bar Colors
-	5. Custom Icon Functionality
-	6. Custom Week Loading
-	7. Icon bop on note hit
-	8. Custom hscript and lua support
+	- Light CPU Strums (Opponent notes glow when they hit a note)
+	- Rating added to the score text
+	- Accuracy added to the score text
+	- Misses added to the score text
+	- Custom Week Loading
+	- Custom hscript and lua support
+	- A better hit detection
  
  - ##  What we are planning to add: 
-	  1. Lua/Hscript that also supports things like notitg-type modcharts or regular modcharts, moving the window or moving things out of the window using a custom window library, adding shaders, making entire coding languages, custom menus, videos in the menus or in songs, etc.
-	  2. Custom Character Functionality
-	  3. A Stage Editor
-	  4. A Shader Editor
-	  5. A Menu Editor
-	  6. A Modchart Editor
-	  7. Improved performance
-	  8. better hit detection
-	  9. A new and improved options menu
-	  10. A new credits menu
+	  - Lua/Hscript that also supports things like notitg-type modcharts or regular modcharts, moving the window or moving things out of the window using a custom window library, adding shaders, making entire coding languages, custom menus, videos in the menus or in songs, etc.
+	  - Custom Character Functionality
+	  - Health Bar Colors
+	  - A Stage Editor
+	  - A Shader Editor
+	  - A Menu Editor
+	  - Custom Icon Functionality
+	  - A Modchart Editor
+	  - Improved Performance
+	  - Icon Bop On Note Hit
+	  - A Options Menu
+	  - A Credits Menu
 	  
 	And way more in the future! 
 
@@ -40,7 +41,8 @@
 - ## Credits for this engine:
 	**Coders:**
 	- ZSolarDev (Coded a LOT of stuff, and created this whole markdown file.)
-	- IceTom (Coded some stuff)
+	- Aura (Coded nothing yet)
+	- IceTom (Coded literally nothing)
 	- Barlizarlk (Made the menus look pretty)
 
 	**Artist:**

@@ -3,7 +3,6 @@ package;
 import openfl.events.Event;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
-
 class SettingContainer {
     public static var keyBinds:Map<String, MappedKeybind>;
     public static var defKeyBinds:Map<String, MappedKeybind> = [ //default keybinds
@@ -17,6 +16,7 @@ class SettingContainer {
         'Reset' => {key: R, altKey: R},
     ];
     public static var ghostTapping:Bool;
+    public static var hitDetectionMode:Int;
     public static function init(){
         if (FlxG.save.data.keybinds == null)
             FlxG.save.data.keybinds = defKeyBinds;
@@ -24,6 +24,9 @@ class SettingContainer {
         if (FlxG.save.data.ghostTapping == null)
             FlxG.save.data.ghostTapping = true;
         ghostTapping = FlxG.save.data.ghostTapping;
+        if (FlxG.save.data.hitDetectionMode == null)
+            FlxG.save.data.hitDetectionMode = 3;
+        hitDetectionMode = FlxG.save.data.hitDetectionMode;
     }
 }
 

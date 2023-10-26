@@ -65,6 +65,7 @@ class Alphabet extends FlxSpriteGroup
 
 	public function addText()
 	{
+		_finalText = text;
 		doSplitWords();
 
 		var xPos:Float = 0;
@@ -115,6 +116,8 @@ class Alphabet extends FlxSpriteGroup
 	function doSplitWords():Void
 	{
 		splitWords = _finalText.split("");
+		trace(_finalText);
+		trace(splitWords);
 	}
 
 	public var personTalking:String = 'gf';

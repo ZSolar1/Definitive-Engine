@@ -29,6 +29,22 @@ class GeneralUtils
 		return ret;
 	}
 
+	public function changeVar(cur:Int, min:Int, max:Int, by:Int)
+	{
+		var ret = cur;
+		ret += by;
+		if (!StringTools.startsWith(Std.string(by), '-'))
+		{
+			ret %= max;
+		}
+		else
+		{
+			if (ret < min)
+				ret = max;
+		}
+		return ret;
+	}
+
 	public function getWeekDataFromJson(json:String)
 	{
 		var weekData:WeekData = TJSON.parse(json);
@@ -139,31 +155,43 @@ class GeneralUtils
 
 		return false;
 	}
-	
-	public static function getNoteNameFromDir(dir:Int){
-		if (dir > 3){
+
+	public static function getNoteNameFromDir(dir:Int)
+	{
+		if (dir > 3)
+		{
 			return 'Left';
-		}else{
-			if (dir == 0){
+		}
+		else
+		{
+			if (dir == 0)
+			{
 				return 'Left';
 			}
-			if (dir == 1){
+			if (dir == 1)
+			{
 				return 'Down';
 			}
-			if (dir == 2){
+			if (dir == 2)
+			{
 				return 'Up';
 			}
-			if (dir == 3){
+			if (dir == 3)
+			{
 				return 'Right';
 			}
 		}
 		return '';
 	}
 
-	public static function getNoteDirFromName(name:String){
-		if (VariableHub.NoteStuff.allStaticNoteTypes.exists(name)){
+	public static function getNoteDirFromName(name:String)
+	{
+		if (VariableHub.NoteStuff.allStaticNoteTypes.exists(name))
+		{
 			return VariableHub.NoteStuff.allStaticNoteTypes.get(name);
-		}else{
+		}
+		else
+		{
 			return 0;
 		}
 	}
@@ -181,6 +209,22 @@ class StaticGeneralUtils
 		trace(ret);
 		ret = StringTools.trim(ret);
 		trace(ret);
+		return ret;
+	}
+
+	public static function changeVar(cur:Int, min:Int, max:Int, by:Int)
+	{
+		var ret = cur;
+		ret += by;
+		if (!StringTools.startsWith(Std.string(by), '-'))
+		{
+			by %= max;
+		}
+		else
+		{
+			if (by < 0)
+				by = max;
+		}
 		return ret;
 	}
 
@@ -304,30 +348,42 @@ class StaticGeneralUtils
 		return false;
 	}
 
-	public static function getNoteNameFromDir(dir:Int){
-		if (dir > 3){
+	public static function getNoteNameFromDir(dir:Int)
+	{
+		if (dir > 3)
+		{
 			return 'Left';
-		}else{
-			if (dir == 0){
+		}
+		else
+		{
+			if (dir == 0)
+			{
 				return 'Left';
 			}
-			if (dir == 1){
+			if (dir == 1)
+			{
 				return 'Down';
 			}
-			if (dir == 2){
+			if (dir == 2)
+			{
 				return 'Up';
 			}
-			if (dir == 3){
+			if (dir == 3)
+			{
 				return 'Right';
 			}
 		}
 		return '';
 	}
 
-	public static function getNoteDirFromName(name:String){
-		if (VariableHub.NoteStuff.allStaticNoteTypes.exists(name)){
+	public static function getNoteDirFromName(name:String)
+	{
+		if (VariableHub.NoteStuff.allStaticNoteTypes.exists(name))
+		{
 			return VariableHub.NoteStuff.allStaticNoteTypes.get(name);
-		}else{
+		}
+		else
+		{
 			return 0;
 		}
 	}

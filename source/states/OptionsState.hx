@@ -1,5 +1,6 @@
 package states;
 
+import utils.GeneralUtils.StaticGeneralUtils;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxBackdrop;
@@ -10,9 +11,9 @@ import flixel.FlxState;
 class OptionsState extends MusicBeatState
 {
 	var sectionList:Array<OptionCatagory> = [
-        new OptionCatagory('Keybinds', new states.options.Keybinds()),
+		new OptionCatagory('Keybinds', new states.options.Keybinds()),
 		new OptionCatagory('Gameplay', new states.options.Gameplay())
-    ];
+	];
 	var alphGrp:FlxTypedGroup<Alphabet>;
 	var bg:FlxSprite;
 	var curSel:Int = 0;
