@@ -24,6 +24,7 @@
 	  - Custom Character Functionality
 	  - Health Bar Colors
 	  - A Stage Editor
+	  - Custom Skins
 	  - A Shader Editor
 	  - A Menu Editor
 	  - Custom Icon Functionality
