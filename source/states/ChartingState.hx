@@ -1,5 +1,6 @@
 package states;
 
+import sys.FileSystem;
 import Section.SwagSection;
 import Song.SwagSong;
 import Conductor.BPMChangeEvent;
@@ -53,7 +54,6 @@ class ChartingState extends MusicBeatState
 	var bpmTxt:FlxText;
 
 	var strumLine:FlxSprite;
-	var curSong:String = 'Dadbattle';
 	var amountSteps:Int = 0;
 	var bullshitUI:FlxGroup;
 
@@ -76,6 +76,7 @@ class ChartingState extends MusicBeatState
 	**/
 	var curSelectedNote:Array<Dynamic>;
 
+	var modName:String = '';
 	var tempBpm:Int = 0;
 
 	var vocals:FlxSound;
@@ -125,6 +126,7 @@ class ChartingState extends MusicBeatState
 				validScore: false
 			};
 		}
+		modName = utils.ModUtils.StaticModUtils.getModName(_song.song);
 
 		FlxG.mouse.visible = true;
 		FlxG.save.bind('funkin', 'ninjamuffin99');
@@ -351,10 +353,43 @@ class ChartingState extends MusicBeatState
 			// vocals.stop();
 		}
 
-		FlxG.sound.playMusic('assets/music/' + daSong + "_Inst" + TitleState.soundExt, 0.6);
+		if (_song.needsVoices)
+			{
+				if (FileSystem.exists("assets/songs/" + _song.song + "/Inst" + TitleState.soundExt))
+				{
+					FlxG.sound.playMusic(Sound.fromFile("assets/songs/" + _song.song + "/Inst" + TitleState.soundExt), 1, false);
+				}
+				else
+				{
+					FlxG.sound.playMusic(Sound.fromFile('mods/$modName/songs/${_song.song.toLowerCase()}/Inst' + TitleState.soundExt), 1, false);
+				}
+			}
+			else
+			{
+				if (FileSystem.exists("assets/songs/" + _song.song + "/" + _song.song + TitleState.soundExt))
+				{
+					FlxG.sound.playMusic(Sound.fromFile("assets/songs/" + _song.song + "/" + _song.song + TitleState.soundExt), 1, false);
+				}
+				else
+				{
+					FlxG.sound.playMusic(Sound.fromFile('mods/$modName/songs/${_song.song.toLowerCase()}/${_song.song.toLowerCase()}' + TitleState.soundExt), 1,
+						false);
+				}
+			}
 
 		// WONT WORK FOR TUTORIAL OR TEST SONG!!! REDO LATER
-		vocals = new FlxSound().loadEmbedded("assets/music/" + daSong + "_Voices" + TitleState.soundExt);
+		if (_song.needsVoices)
+			if (FileSystem.exists("assets/songs/" + _song.song + "/Voices" + TitleState.soundExt))
+			{
+				vocals = new FlxSound().loadEmbedded(Sound.fromFile("assets/songs/" + _song.song + "/Voices" + TitleState.soundExt));
+			}
+			else
+			{
+				vocals = new FlxSound().loadEmbedded(Sound.fromFile('mods/$modName/songs/${_song.song}/Voices' + TitleState.soundExt));
+			}
+		else
+			vocals = new FlxSound();
+
 		FlxG.sound.list.add(vocals);
 
 		FlxG.sound.music.pause();
