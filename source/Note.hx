@@ -181,9 +181,6 @@ class Note extends FlxSprite
 			}
 			else
 				canBeHit = false;
-
-			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset)
-				tooLate = true;
 		}
 		else
 		{

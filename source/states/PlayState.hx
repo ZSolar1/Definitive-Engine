@@ -2026,28 +2026,23 @@ class PlayState extends MusicBeatState
 		var controlArray:Array<Bool> = [leftP, downP, upP, rightP];
 
 		// FlxG.watch.addQuick('asdfa', upP);
-		if ((upP || rightP || downP || leftP) && !boyfriend.stunned && generatedMusic)
+		if (controlArray.contains(true) && !boyfriend.stunned && generatedMusic)
 		{
 			boyfriend.holdTimer = 0;
-            var noteHit:Bool = false;
+			var noteHit:Bool = false;
 
-			notes.forEachAlive(function(daNote:Note)
+			for (daNote in notes)
 			{
-				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && controlArray[daNote.noteData])
+				if (daNote.canBeHit && daNote.mustPress && controlArray[daNote.noteData])
 				{
-                    goodNoteHit(daNote);
-                    noteHit = true;
-					// // the sorting probably doesn't need to be in here? who cares lol
-					// possibleNotes.push(daNote);
-					// possibleNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
-
-					// ignoreList.push(daNote.noteData);
+					goodNoteHit(daNote);
+					noteHit = true;
 				}
 
-			});
-            if (!SettingContainer.ghostTapping && !noteHit){
-                badNoteCheck();
-            }
+			};
+			if (!SettingContainer.ghostTapping && !noteHit){
+				badNoteCheck();
+			}
 		}
 
 		if ((up || right || down || left) && !boyfriend.stunned && generatedMusic)
@@ -2084,7 +2079,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		playerStrums.forEach(function(spr:FlxSprite)
+		for (spr in playerStrums)
 		{
 			switch (spr.ID)
 			{
@@ -2118,7 +2113,7 @@ class PlayState extends MusicBeatState
 			}
 			else
 				spr.centerOffsets();
-		});
+		};
 	}
 
 	function noteMiss(direction:Int = 1):Void
@@ -2177,18 +2172,6 @@ class PlayState extends MusicBeatState
 			noteMiss(3);
 	}
 
-	function noteCheck(keyP:Bool, note:Note):Void
-	{
-		if (keyP)
-			goodNoteHit(note);
-		else
-		{
-			if (!SettingContainer.ghostTapping){
-				badNoteCheck();
-			}
-		}
-	}
-
 	function goodNoteHit(note:Note):Void
 	{
 		if (!note.wasGoodHit)
@@ -2214,13 +2197,13 @@ class PlayState extends MusicBeatState
 					boyfriend.playAnim('singRIGHT', true);
 			}
 
-			playerStrums.forEach(function(spr:FlxSprite)
+			for (spr in playerStrums)
 			{
 				if (Math.abs(note.noteData) == spr.ID)
 				{
 					spr.animation.play('confirm', true);
 				}
-			});
+			};
 
 			note.wasGoodHit = true;
 			vocals.volume = 1;
