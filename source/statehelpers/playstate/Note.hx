@@ -1,4 +1,4 @@
-package;
+package statehelpers.playstate;
 
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
