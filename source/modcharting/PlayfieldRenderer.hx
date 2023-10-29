@@ -19,7 +19,7 @@ import modcharting.Modifier;
 import flixel.system.FlxAssets.FlxShader;
 
 import states.PlayState;
-import Note;
+import statehelpers.playstate.Note;
 
 using StringTools;
 

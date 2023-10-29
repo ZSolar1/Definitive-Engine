@@ -5,7 +5,7 @@ import flixel.math.FlxMath;
 import flixel.FlxG;
 
 import states.PlayState;
-import Note;
+import statehelpers.playstate.Note;
 
 enum ModifierType
 {

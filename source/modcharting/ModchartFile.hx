@@ -230,7 +230,7 @@ class CustomModifierScript
 		interp.variables.set('game', PlayState.instance);
 		interp.variables.set('Conductor', Conductor);
         interp.variables.set('StringTools', StringTools);
-        interp.variables.set('Note', Note);
+        interp.variables.set('Note', statehelpers.playstate.Note);
     }
     public function call(event:String, args:Array<Dynamic>)
     {

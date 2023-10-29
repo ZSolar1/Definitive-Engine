@@ -6,7 +6,7 @@ import flixel.FlxSprite;
 import flixel.FlxG;
 
 import states.PlayState;
-import Note;
+import statehelpers.playstate.Note;
 
 using StringTools;
 

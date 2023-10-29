@@ -1,5 +1,6 @@
 package modcharting;
 
+import statehelpers.playstate.Note;
 import flixel.graphics.tile.FlxDrawTrianglesItem.DrawData;
 import openfl.geom.Vector3D; 
 import flixel.FlxStrip;
