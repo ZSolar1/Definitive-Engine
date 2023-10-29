@@ -1,5 +1,8 @@
 package states;
 
+import utils.ADHUtil;
+import sys.io.File;
+import utils.ModUtils;
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -9,12 +12,19 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
+import openfl.media.Sound;
+import sys.FileSystem;
 
 using StringTools;
 
+typedef SongData = {
+	var song:String;
+	var icon:String;
+}
+
 class FreeplayState extends MusicBeatState
 {
-	var songs:Array<String> = [];
+	var songs:Array<SongData> = [];
 
 	var selector:FlxText;
 	var curSelected:Int = 0;
@@ -30,8 +40,9 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
-		songs = CoolUtil.coolTextFile('assets/data/freeplaySonglist.txt');
-
+		for (song in ADHUtil.Parse(File.getContent('assets/data/freeplaySongList.adh'))){
+			songs.push({song: song[0], icon: song[1]});
+		}
 		/* 
 			if (FlxG.sound.music != null)
 			{
@@ -40,46 +51,46 @@ class FreeplayState extends MusicBeatState
 			}
 		 */
 
-		var isDebug:Bool = false;
+		// var isDebug:Bool = false;
 
-		#if debug
-		isDebug = true;
-		#end
+		// #if debug
+		// isDebug = true;
+		// #end
 
-		if (StoryMenuState.weekUnlocked[2] || isDebug)
-		{
-			songs.push('Spookeez');
-			songs.push('South');
-		}
+		// if (StoryMenuState.weekUnlocked[2] || isDebug)
+		// {
+		// 	songs.push({song: 'Spookeez', icon: 'spooky'});
+		// 	songs.push({song: 'South', icon: 'spooky'});
+		// }
 
-		if (StoryMenuState.weekUnlocked[3] || isDebug)
-		{
-			songs.push('Pico');
-			songs.push('Philly');
-			songs.push('Blammed');
-		}
+		// if (StoryMenuState.weekUnlocked[3] || isDebug)
+		// {
+		// 	songs.push({song: 'Pico', icon: 'pico'});
+		// 	songs.push({song: 'Philly', icon: 'pico'});
+		// 	songs.push({song: 'Blammed', icon: 'pico'});
+		// }
 
-		if (StoryMenuState.weekUnlocked[4] || isDebug)
-		{
-			songs.push('Satin-Panties');
-			songs.push('High');
-			songs.push('Milf');
-		}
+		// if (StoryMenuState.weekUnlocked[4] || isDebug)
+		// {
+		// 	songs.push({song: 'Satin-Panties', icon: 'mom'});
+		// 	songs.push({song: 'High', icon: 'mom'});
+		// 	songs.push({song: 'Milf', icon: 'mom'});
+		// }
 
-		if (StoryMenuState.weekUnlocked[5] || isDebug)
-		{
-			songs.push('Cocoa');
-			songs.push('Eggnog');
-			songs.push('Winter-Horrorland');
-		}
+		// if (StoryMenuState.weekUnlocked[5] || isDebug)
+		// {
+		// 	songs.push({song: 'Cocoa', icon: 'parents-christmas'});
+		// 	songs.push({song: 'Eggnog', icon: 'parents-christmas'});
+		// 	songs.push({song: 'Winter-Horrorland', icon: 'monster-christmas'});
+		// }
 
-		if (StoryMenuState.weekUnlocked[6] || isDebug)
-		{
-			songs.push('Senpai');
-			songs.push('Roses');
-			songs.push('Thorns');
-			// songs.push('Winter-Horrorland');
-		}
+		// if (StoryMenuState.weekUnlocked[6] || isDebug)
+		// {
+		// 	songs.push({song: 'Senpai', icon: 'senpai'});
+		// 	songs.push({song: 'Roses', icon: 'senpai'});
+		// 	songs.push({song: 'Thorns', icon: 'senpai'});
+		// 	// songs.push('Winter-Horrorland');
+		// }
 
 		// LOAD MUSIC
 
@@ -93,11 +104,14 @@ class FreeplayState extends MusicBeatState
 
 		for (i in 0...songs.length)
 		{
-			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i], true, false);
+			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i].song, true, false);
 			songText.isMenuItem = true;
 			songText.targetY = i;
 			grpSongs.add(songText);
 			// songText.x += 40;
+			var icon:HealthIcon = new HealthIcon(songs[i].icon);
+			icon.sprTracker = songText;
+			add(icon);
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
 			// songText.screenCenter(X);
 		}
@@ -191,11 +205,11 @@ class FreeplayState extends MusicBeatState
 
 		if (accepted)
 		{
-			var poop:String = Highscore.formatSong(songs[curSelected].toLowerCase(), curDifficulty);
+			var poop:String = Highscore.formatSong(songs[curSelected].song.toLowerCase(), curDifficulty);
 
 			trace(poop);
 
-			PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].toLowerCase());
+			PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].song.toLowerCase());
 			PlayState.isStoryMode = false;
 			PlayState.storyDifficulty = curDifficulty;
 			FlxG.switchState(new PlayState());
@@ -214,7 +228,7 @@ class FreeplayState extends MusicBeatState
 			curDifficulty = 0;
 
 		#if !switch
-		intendedScore = Highscore.getScore(songs[curSelected], curDifficulty);
+		intendedScore = Highscore.getScore(songs[curSelected].song, curDifficulty);
 		#end
 
 		switch (curDifficulty)
@@ -244,11 +258,34 @@ class FreeplayState extends MusicBeatState
 		// selector.y = (70 * curSelected) + 30;
 
 		#if !switch
-		intendedScore = Highscore.getScore(songs[curSelected], curDifficulty);
+		intendedScore = Highscore.getScore(songs[curSelected].song, curDifficulty);
 		// lerpScore = 0;
-		#end
+		#end 
+		var song = songs[curSelected].song.toLowerCase();
 
-		FlxG.sound.playMusic('assets/music/' + songs[curSelected] + "_Inst" + TitleState.soundExt, 0);
+		if (FileSystem.exists("assets/songs/" + song + "/Inst.ogg") || FileSystem.exists('mods/${utils.ModUtils.StaticModUtils.getModNameForFile('songs/$song')}/songs/${song.toLowerCase()}/Inst'))
+			{
+				if (FileSystem.exists("assets/songs/" + song + "/Inst" + TitleState.soundExt))
+				{
+					FlxG.sound.playMusic(Sound.fromFile("assets/songs/" + song + "/Inst" + TitleState.soundExt), 1, false);
+				}
+				else
+				{
+					FlxG.sound.playMusic(Sound.fromFile('mods/${utils.ModUtils.StaticModUtils.getModNameForFile('songs/$song')}/songs/${song.toLowerCase()}/Inst' + TitleState.soundExt), 1, false);
+				}
+			}
+			else
+			{
+				if (FileSystem.exists("assets/songs/" + song + "/" + song + TitleState.soundExt))
+				{
+					FlxG.sound.playMusic(Sound.fromFile("assets/songs/" + song + "/" + song + TitleState.soundExt), 1, false);
+				}
+				else
+				{
+					FlxG.sound.playMusic(Sound.fromFile('mods/${utils.ModUtils.StaticModUtils.getModNameForFile('songs/$song')}/songs/${song.toLowerCase()}/${song.toLowerCase()}' + TitleState.soundExt), 1,
+						false);
+				}
+			}
 
 		var bullShit:Int = 0;
 

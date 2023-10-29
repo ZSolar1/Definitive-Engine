@@ -126,7 +126,7 @@ class ChartingState extends MusicBeatState
 				validScore: false
 			};
 		}
-		modName = utils.ModUtils.StaticModUtils.getModName(_song.song);
+		modName = utils.ModUtils.StaticModUtils.getModNameForFile('songs/${_song.song}');
 
 		FlxG.mouse.visible = true;
 		FlxG.save.bind('funkin', 'ninjamuffin99');

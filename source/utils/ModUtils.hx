@@ -4,19 +4,16 @@ import sys.FileSystem;
 
 class ModUtils
 {
-	public function getModName(song:String)
+	public function getModNameForFile(filePath:String)
 	{
 		if (FileSystem.exists('mods/'))
 		{
-			for (folder in FileSystem.readDirectory('mods/'))
+			for (mod in FileSystem.readDirectory('mods/'))
 			{
-				if (folder != 'packagedMods')
+				if (FileSystem.exists('mods/$mod/$filePath'))
 				{
-					if (FileSystem.exists('mods/$folder/songs/${song}'))
-					{
-						return folder;
-						break;
-					}
+					return mod;
+					break;
 				}
 			}
 		}
@@ -64,22 +61,27 @@ class ModUtils
 				}
 			}
 		}
-		if (ret.length > 1){
-		    return ret;
-        }else{
-            return ret[0];
-        }
+		if (ret.length > 1)
+		{
+			return ret;
+		}
+		else
+		{
+			return ret[0];
+		}
 	}
 }
 
 class StaticModUtils
 {
-	public static function getModName(song:String)
+	public static function getModNameForFile(filePath:String)
 	{
 		if (FileSystem.exists('mods/'))
 		{
-			for (mod in FileSystem.readDirectory('mods/')){
-				if (FileSystem.exists('mods/$mod/songs/$song')){
+			for (mod in FileSystem.readDirectory('mods/'))
+			{
+				if (FileSystem.exists('mods/$mod/$filePath'))
+				{
 					return mod;
 					break;
 				}
@@ -88,7 +90,7 @@ class StaticModUtils
 		return '';
 	}
 
-	public static function getMods(getWeeks:Bool, returnPaths:Bool, ?pathsOnly:Bool):Dynamic //DON'T USE THIS FUNCTION, PLEASE
+	public static function getMods(getWeeks:Bool, returnPaths:Bool, ?pathsOnly:Bool):Dynamic // DON'T USE THIS FUNCTION, PLEASE
 	{
 		var ret:Array<String> = [];
 		for (folder in FileSystem.readDirectory('mods/'))
@@ -129,10 +131,13 @@ class StaticModUtils
 				}
 			}
 		}
-        if (ret.length > 1){
-		    return ret;
-        }else{
-            return ret[0];
-        }
+		if (ret.length > 1)
+		{
+			return ret;
+		}
+		else
+		{
+			return ret[0];
+		}
 	}
 }

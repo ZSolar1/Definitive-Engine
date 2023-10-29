@@ -45,7 +45,7 @@ class Song
 			trace('assets/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json');
 			rawJson = File.getContent('assets/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim();
 		}catch(e){
-			rawJson = File.getContent('mods/${StaticModUtils.getModName(folder)}/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim();
+			rawJson = File.getContent('mods/${StaticModUtils.getModNameForFile('songs/$folder')}/songs/' + folder.toLowerCase() + '/' + jsonInput.toLowerCase() + '.json').trim();
 		}
 
 		while (!rawJson.endsWith("}"))

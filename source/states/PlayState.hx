@@ -658,7 +658,7 @@ class PlayState extends MusicBeatState
 		playerStrums = new FlxTypedGroup<FlxSprite>();
 		oppStrums = new FlxTypedGroup<FlxSprite>();
 
-		modName = utils.ModUtils.StaticModUtils.getModName(SONG.song);
+		modName = utils.ModUtils.StaticModUtils.getModNameForFile('songs/${SONG.song}');
 
 		generateSong(SONG.song);
 
