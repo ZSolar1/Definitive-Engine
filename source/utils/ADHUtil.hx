@@ -4,7 +4,10 @@ using StringTools;
 
 class ADHUtil { //Array Data Holder Utility
     public static function Parse(data:String) { //By ZSolarDev and Aura
-        var declarations = data.split(';');
+		var readyRaw = data;
+		if (readyRaw.endsWith(';'))
+			readyRaw = readyRaw.substring(0,readyRaw.length-2);
+        var declarations = readyRaw.split(';');
         var result = [];
         for (declaration in declarations) {
             var variables = declaration.split(",");
