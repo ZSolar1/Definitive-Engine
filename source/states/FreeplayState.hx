@@ -40,7 +40,7 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
-		for (song in ADHUtil.Parse(File.getContent('assets/data/freeplaySongList.adh'))){
+		for (song in ADHUtil.ParseAA(File.getContent('assets/data/freeplaySongList.adh'))){
 			songs.push({song: song[0], icon: song[1]});
 		}
 		// if (FileSystem.exists('mods/')){

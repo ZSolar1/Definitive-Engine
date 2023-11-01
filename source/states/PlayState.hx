@@ -1,5 +1,7 @@
 package states; // line 361
 
+import sys.io.File;
+import utils.ADHUtil;
 import sys.FileSystem;
 import modded.scripting.ShmoovinHScript;
 import modded.scripting.ShmoovinLua;
@@ -185,11 +187,11 @@ class PlayState extends MusicBeatState
 					"Only then I will even CONSIDER letting you\ndate my daughter!"
 				];
 			case 'senpai':
-				dialogue = CoolUtil.coolTextFile('assets/data/senpai/senpaiDialogue.txt');
+				dialogue = ADHUtil.ParseA(File.getContent(('assets/songs/senpai/senpaiDialogue.adh')));
 			case 'roses':
-				dialogue = CoolUtil.coolTextFile('assets/data/roses/rosesDialogue.txt');
+				dialogue = ADHUtil.ParseA(File.getContent(('assets/songs/roses/rosesDialogue.adh')));
 			case 'thorns':
-				dialogue = CoolUtil.coolTextFile('assets/data/thorns/thornsDialogue.txt');
+				dialogue = ADHUtil.ParseA(File.getContent(('assets/songs/thorns/thornsDialogue.adh')));
 		}
 
 		if (SONG.song.toLowerCase() == 'spookeez' || SONG.song.toLowerCase() == 'monster' || SONG.song.toLowerCase() == 'south')
