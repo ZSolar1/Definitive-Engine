@@ -9,7 +9,8 @@ import flixel.graphics.frames.FlxAtlasFrames;
 
 using StringTools;
 
-typedef AnimData = {
+typedef AnimData =
+{
 	var name:String;
 	var prefix:String;
 	var fps:Int;
@@ -21,10 +22,10 @@ typedef AnimData = {
 
 typedef CharData =
 {
-	var pngPath:String;
-	var xmlPath:String;
 	var name:String;
 	var anims:Array<AnimData>;
+	var pngPath:String;
+	var xmlPath:String;
 }
 
 class Character extends FlxSprite
@@ -41,7 +42,6 @@ class Character extends FlxSprite
 		'bf', 'bf-pixel', 'bf-pixel-dead', 'bf-car', 'gf', 'gf-car', 'gf-christmas', 'dad', 'mom', 'mom-car', 'spooky', 'pico', 'senpai', 'senpai-angry',
 		'spirit', 'parents-christmas'
 	];
-	public var charPath:String = '';
 	public var characterData:CharData;
 
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)
@@ -530,28 +530,33 @@ class Character extends FlxSprite
 		}
 		else
 		{
-			for (mod in FileSystem.readDirectory('mods/'))
+			if (FileSystem.exists('mods/'))
 			{
-				for (char in FileSystem.readDirectory('mods/$mod/characters/data/'))
+				for (mod in FileSystem.readDirectory('mods/'))
 				{
-					if (charPath == '')
+					if (FileSystem.exists('mods/$mod/characters/$curCharacter'))
 					{
-						if (char == curCharacter + '.json')
+						trace(curCharacter);
+						characterData = cast TJSON.parse(File.getContent('mods/$mod/characters/$curCharacter/char.json'), curCharacter);
+						frames = FlxAtlasFrames.fromSparrow('mods/$mod/characters/$curCharacter/images/${characterData.pngPath}',
+							File.getContent('mods/$mod/characters/$curCharacter/images/${characterData.xmlPath}'));
+						trace(File.getContent('mods/$mod/characters/$curCharacter/images/${characterData.xmlPath}'));
+						trace(characterData);
+						trace(characterData.anims);
+						for (anim in characterData.anims)
 						{
-							characterData = TJSON.parse(File.getContent('mods/$mod/characters/data/$char'));
-							trace(characterData.pngPath);
-							trace(characterData.xmlPath);
-							break;
+							trace(anim);
+							trace([anim.name, anim.prefix, anim.fps, anim.looped, anim.flipX, anim.flipY]);
+							animation.addByPrefix(anim.name, anim.prefix, anim.fps, anim.looped, anim.flipX, anim.flipY);
+							addOffset(anim.name, anim.offsets[0], anim.offsets[1]);
 						}
+						trace(characterData.pngPath);
+						trace(characterData.xmlPath);
+						break;
 					}
 				}
 			}
-			trace(characterData.pngPath);
-			frames = FlxAtlasFrames.fromSparrow(characterData.pngPath, characterData.xmlPath);
-			for (anim in 0...characterData.anims.length){
-				animation.addByPrefix(characterData.anims[anim].name, characterData.anims[anim].prefix, characterData.anims[anim].fps, characterData.anims[anim].looped, characterData.anims[anim].flipX, characterData.anims[anim].flipY);
-				addOffset(characterData.anims[anim].name, characterData.anims[anim].offsets[0], characterData.anims[anim].offsets[1]);
-			}
+			trace(animation.getNameList());
 			playAnim('idle');
 		}
 
@@ -681,8 +686,8 @@ class Character extends FlxSprite
 	{
 		animation.play(AnimName, Force, Reversed, Frame);
 
-		var daOffset = animOffsets.get(animation.curAnim.name);
-		if (animOffsets.exists(animation.curAnim.name))
+		var daOffset = animOffsets.get(AnimName);
+		if (animOffsets.exists(AnimName))
 		{
 			offset.set(daOffset[0], daOffset[1]);
 		}

@@ -1,5 +1,6 @@
 package;
 
+import tjson.TJSON;
 import utils.ModUtils.StaticModUtils;
 import sys.io.File;
 import Section.SwagSection;
@@ -14,6 +15,7 @@ typedef SwagSong =
 	var bpm:Int;
 	var needsVoices:Bool;
 	var speed:Float;
+	var stage:String;
 
 	var player1:String;
 	var player2:String;
@@ -27,13 +29,17 @@ class Song
 	public var bpm:Int;
 	public var needsVoices:Bool = true;
 	public var speed:Float = 1;
+	public var stage:String = 'stage';
 
 	public var player1:String = 'bf';
 	public var player2:String = 'dad';
 
+	static var staticSong:String;
+
 	public function new(song, notes, bpm)
 	{
 		this.song = song;
+		staticSong = song;
 		this.notes = notes;
 		this.bpm = bpm;
 	}
@@ -74,7 +80,7 @@ class Song
 
 	public static function parseJSONshit(rawJson:String):SwagSong
 	{
-		var swagShit:SwagSong = cast Json.parse(rawJson).song;
+		var swagShit:SwagSong = cast TJSON.parse(rawJson, staticSong).song;
 		swagShit.validScore = true;
 		return swagShit;
 	}

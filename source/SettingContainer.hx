@@ -27,6 +27,11 @@ class SettingContainer {
         if (FlxG.save.data.hitDetectionMode == null)
             FlxG.save.data.hitDetectionMode = 3;
         hitDetectionMode = FlxG.save.data.hitDetectionMode;
+        FlxG.stage.addEventListener(Event.ENTER_FRAME, function(e){
+            FlxG.save.data.hitDetectionMode = hitDetectionMode;
+            FlxG.save.data.ghostTapping = ghostTapping;
+            FlxG.save.data.keybinds = keyBinds;
+        });
     }
 }
 
