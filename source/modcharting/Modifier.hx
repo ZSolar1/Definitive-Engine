@@ -12,7 +12,7 @@ enum ModifierType
     ALL;
     PLAYERONLY;
     OPPONENTONLY;
-    LANESPECIFIC;   
+    LANESPECIFIC;
 }
 
 class ModifierSubValue 

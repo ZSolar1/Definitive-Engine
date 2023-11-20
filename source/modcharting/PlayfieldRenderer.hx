@@ -42,7 +42,7 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
     public var playfields:Array<Playfield> = []; //adding an extra playfield will add 1 for each player
 
     public var eventManager:ModchartEventManager;
-    public var modifierTable:ModTable;
+    public var modifierTable:modcharting.ModTable;
     public var tweenManager:FlxTweenManager;
 
     public var modchart:ModchartFile;

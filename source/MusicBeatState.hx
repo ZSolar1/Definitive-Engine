@@ -12,8 +12,8 @@ import flixel.util.FlxTimer;
 
 class MusicBeatState extends modcharting.ModchartMusicBeatState
 {
-	private var lastBeat:Float = 0;
-	private var lastStep:Float = 0;
+	private var lastBeat:Int = 0;
+	private var lastStep:Int = 0;
 
 	public static var curStepS:Int = 0;
 	public static var curBeatS:Int = 0;

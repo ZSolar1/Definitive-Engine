@@ -38,7 +38,7 @@ class TitleState extends MusicBeatState
 	var ngSpr:FlxSprite;
 
 	var textShow:Int = -1;
-	var endBeat:Int = 0;
+	var endBeat:Float = 0;
 	var curWacky:Array<String> = [];
 	var startingWacky:Array<Array<String>> = [];
 

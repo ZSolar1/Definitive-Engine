@@ -1,7 +1,6 @@
 package states; // line 361
 
 import stateHelpers.playstate.StageManager.Stage;
-import modcharting.Modifier.DrunkXModifier;
 import sys.io.File;
 import utils.ADHUtil;
 import sys.FileSystem;
@@ -170,6 +169,43 @@ class PlayState extends MusicBeatState
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
 		curSong = SONG.song;
+		for (script in hscriptArray){//just making sure it fully unloads, esspecially lua bc luas "State" doesnt know to reset when the FlxState resets.
+			script.unload();
+		}
+		for (script in luaArray){
+			script.unload();
+		}
+		hscriptArray = [];
+		luaArray = [];
+		if (FileSystem.exists('mods/$modName/songs/${curSong}/assets/modcharts/'))
+		{
+			for (modchart in FileSystem.readDirectory('mods/$modName/songs/${curSong}/assets/modcharts/'))
+			{
+				if (StringTools.endsWith(modchart, '.hx'))
+				{
+					hscriptArray.push(new ShmoovinHScript('mods/$modName/songs/${curSong}/assets/modcharts/$modchart'));
+				}
+				if (StringTools.endsWith(modchart, '.lua'))
+				{
+					luaArray.push(new ShmoovinLua('mods/$modName/songs/${curSong}/assets/modcharts/$modchart'));
+				}
+			}
+		}
+		if (FileSystem.exists('assets/songs/${curSong}/modcharts/'))
+		{
+			for (modchart in FileSystem.readDirectory('assets/songs/${curSong}/modcharts/'))
+			{
+				if (StringTools.endsWith(modchart, '.hx'))
+				{
+					hscriptArray.push(new ShmoovinHScript('assets/songs/${curSong}/modcharts/$modchart'));
+				}
+				if (StringTools.endsWith(modchart, '.lua'))
+				{
+					luaArray.push(new ShmoovinLua('assets/songs/${curSong}/modcharts/$modchart'));
+				}
+			}
+		}
+		call('create');
 
 		switch (curSong.toLowerCase())
 		{
@@ -700,21 +736,6 @@ class PlayState extends MusicBeatState
 		scoreTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 
-		if (FileSystem.exists('mods/$modName/songs/${curSong}/assets/modcharts/'))
-		{
-			for (modchart in FileSystem.readDirectory('mods/$modName/songs/${curSong}/assets/modcharts/'))
-			{
-				if (StringTools.endsWith(modchart, '.hx'))
-				{
-					hscriptArray.push(new ShmoovinHScript('mods/$modName/songs/${curSong}/assets/modcharts/$modchart'));
-				}
-				if (StringTools.endsWith(modchart, '.lua'))
-				{
-					luaArray.push(new ShmoovinLua('mods/$modName/songs/${curSong}/assets/modcharts/$modchart'));
-				}
-			}
-		}
-
 		startingSong = true;
 
 		if (isStoryMode)
@@ -770,22 +791,23 @@ class PlayState extends MusicBeatState
 		}
 
 		super.create();
+		call('postCreate');
 	}
 
-	function call(func:String, params:Array<Dynamic>)
+	function call(func:String, ?params:Array<Dynamic>)
 	{
 		if (hscriptArray != [])
 		{
 			for (script in 0...hscriptArray.length)
 			{
-				hscriptArray[script].callHscript(func, params);
+				hscriptArray[script].call(func, params);
 			}
 		}
 		if (luaArray != [])
 		{
 			for (script in 0...luaArray.length)
 			{
-				luaArray[script].callLua(func, params);
+				luaArray[script].call(func, params);
 			}
 		}
 	}
@@ -993,6 +1015,7 @@ class PlayState extends MusicBeatState
 			swagCounter += 1;
 			// generateSong('fresh');
 		}, 5);
+		call('countdownStarted');
 	}
 
 	var previousFrameTime:Int = 0;
@@ -1041,9 +1064,10 @@ class PlayState extends MusicBeatState
 			playfieldRenderer.modifierTable.tweenModifier('test', 10, 1,'circOut', modcharting.Modifier.beat);
 			playfieldRenderer.modifierTable.tweenModifier('test1', 2, 1,'circOut', modcharting.Modifier.beat);
 		 */
-		ModchartFuncs.startMod('Drunk', 'DrunkXModifier', '', -1, this);
-		ModchartFuncs.ease(0, Conductor.crochet/1000, 'circOut', '2,Drunk, 4,Drunk:speed', this);
-		playfieldRenderer.modifierTable.reconstructTable();
+		call('songStarted');
+		// ModchartFuncs.startMod('Drunk', 'DrunkXModifier', '', -1);
+		// ModchartFuncs.ease(0, Conductor.crochet / 1000, 'circOut', '2,Drunk, 4,Drunk:speed');
+		// playfieldRenderer.modifierTable.reconstructTable();
 	}
 
 	var debugNum:Int = 0;
@@ -1310,6 +1334,7 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
+		call('update');
 		#if !debug
 		perfectMode = false;
 		#end
@@ -1705,10 +1730,12 @@ class PlayState extends MusicBeatState
 		if (FlxG.keys.justPressed.ONE)
 			endSong();
 		#end
+		call('postUpdate');
 	}
 
 	function endSong():Void
 	{
+		call('endedSong');
 		canPause = false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
@@ -1789,6 +1816,7 @@ class PlayState extends MusicBeatState
 
 	private function popUpScore(strumtime:Float, note:Note):Void
 	{
+		call('popUpScore', [strumtime, note]);
 		var noteDiff:Float = Math.abs(strumtime - Conductor.songPosition);
 		// boyfriend.playAnim('hey');
 		vocals.volume = 1;
@@ -1970,10 +1998,12 @@ class PlayState extends MusicBeatState
 		});
 
 		curSection += 1;
+		call('postPopUpScore', [strumtime, note]);
 	}
 
 	private function keyShit():Void
 	{
+		call('keyManaging');
 		// HOLDING
 		var up = controls.UP;
 		var right = controls.RIGHT;
@@ -2081,10 +2111,12 @@ class PlayState extends MusicBeatState
 			else
 				spr.centerOffsets();
 		};
+		call('postKeyManaging');
 	}
 
 	function noteMiss(direction:Int = 1):Void
 	{
+		call('noteMissed', [direction]);
 		health -= 0.04;
 		if (combo > 5)
 		{
@@ -2118,6 +2150,7 @@ class PlayState extends MusicBeatState
 			case 3:
 				boyfriend.playAnim('singRIGHTmiss', true);
 		}
+		call('postNoteMissed', [direction]);
 	}
 
 	function badNoteCheck()
@@ -2141,6 +2174,7 @@ class PlayState extends MusicBeatState
 
 	function goodNoteHit(note:Note):Void
 	{
+		call('noteHit');
 		if (!note.wasGoodHit)
 		{
 			if (!note.isSustainNote)
@@ -2182,6 +2216,7 @@ class PlayState extends MusicBeatState
 				note.destroy();
 			}
 		}
+		call('postNoteHit');
 	}
 
 	var fastCarCanDrive:Bool = true;
@@ -2274,6 +2309,7 @@ class PlayState extends MusicBeatState
 
 	override function stepHit()
 	{
+		call('stepHit');
 		super.stepHit();
 		if (SONG.needsVoices)
 		{
@@ -2287,6 +2323,7 @@ class PlayState extends MusicBeatState
 		{
 			// dad.dance();
 		}
+		call('postStepHit');
 	}
 
 	var lightningStrikeBeat:Int = 0;
@@ -2294,6 +2331,7 @@ class PlayState extends MusicBeatState
 
 	override function beatHit()
 	{
+		call('beatHit');
 		super.beatHit();
 
 		if (generatedMusic)
@@ -2403,6 +2441,7 @@ class PlayState extends MusicBeatState
 		{
 			lightningStrikeShit();
 		}
+		call('postBeatHit');
 	}
 
 	var curLight:Int = 0;

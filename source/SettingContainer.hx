@@ -3,6 +3,7 @@ package;
 import openfl.events.Event;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
+using StringTools;
 class SettingContainer {
     public static var keyBinds:Map<String, MappedKeybind>;
     public static var defKeyBinds:Map<String, MappedKeybind> = [ //default keybinds
@@ -15,23 +16,32 @@ class SettingContainer {
         'Cheat' => {key: SIX, altKey: SIX},
         'Reset' => {key: R, altKey: R},
     ];
-    public static var ghostTapping:Bool;
+    public static var sustainQuality:Int = 2;
+    public static var ghostTapping:Bool = true;
     public static var hitDetectionMode:Int;
     public static function init(){
         if (FlxG.save.data.keybinds == null)
             FlxG.save.data.keybinds = defKeyBinds;
-        keyBinds = KeyMgr.getKeybinds();
         if (FlxG.save.data.ghostTapping == null)
             FlxG.save.data.ghostTapping = true;
-        ghostTapping = FlxG.save.data.ghostTapping;
+        if (FlxG.save.data.sustainQuality == null)
+            FlxG.save.data.sustainQuality = 1;
         if (FlxG.save.data.hitDetectionMode == null)
             FlxG.save.data.hitDetectionMode = 3;
+        load();
+    }
+    public static function save(){
+        FlxG.save.data.keybinds = keyBinds;
+        FlxG.save.data.ghostTapping = ghostTapping;
+        FlxG.save.data.hitDetectionMode = hitDetectionMode;
+        FlxG.save.data.sustainQuality = sustainQuality;
+    }
+    public static function load(){
+        keyBinds = FlxG.save.data.keybinds;
+        ghostTapping = FlxG.save.data.ghostTapping;
         hitDetectionMode = FlxG.save.data.hitDetectionMode;
-        FlxG.stage.addEventListener(Event.ENTER_FRAME, function(e){
-            FlxG.save.data.hitDetectionMode = hitDetectionMode;
-            FlxG.save.data.ghostTapping = ghostTapping;
-            FlxG.save.data.keybinds = keyBinds;
-        });
+        //sustainQuality = FlxG.save.data.sustainQuality;
+        sustainQuality = 1;
     }
 }
 
@@ -45,32 +55,22 @@ typedef MappedKeybind = {
     var key:FlxKey;
     var altKey:FlxKey;
 }
-
 class KeyMgr {
     public static function getKeybinds():Map<String, MappedKeybind>{
-        //trace(FlxG.save.data.keybinds);
-        //if (FlxG.save.data.keybinds == null)
-            FlxG.save.data.keybinds = SettingContainer.defKeyBinds;
-
-        //trace(FlxG.save.data.keybinds);
-        return(FlxG.save.data.keybinds);
+        return FlxG.save.data.keybinds;
     }
-    public static function setKeybinds(keys:Map<String, MappedKeybind>){
+    public static function setKeybind(keyName:String, newKey:MappedKeybind){
+        var keys:Map<String, MappedKeybind> = FlxG.save.data.keybinds;
+        keys.set(keyName, newKey);
         FlxG.save.data.keybinds = keys;
     }
-    public static function setKeybind(keyName:String, key:MappedKeybind){
-        FlxG.save.data.keybinds.set(keyName, key);
-    }
     public static function justPressed(keyName:String):Bool{
-        //trace('justPressed($keyName): ${FlxG.keys.anyJustPressed([getKeybinds().get(keyName).key]) || FlxG.keys.anyJustPressed([getKeybinds().get(keyName).altKey])}');
         return FlxG.keys.anyJustPressed([getKeybinds().get(keyName).key]) || FlxG.keys.anyJustPressed([getKeybinds().get(keyName).altKey]);
     }
     public static function justReleased(keyName:String):Bool{
-        //trace('justReleased($keyName): ${FlxG.keys.anyJustReleased([getKeybinds().get(keyName).key]) || FlxG.keys.anyJustReleased([getKeybinds().get(keyName).altKey])}');
         return FlxG.keys.anyJustReleased([getKeybinds().get(keyName).key]) || FlxG.keys.anyJustReleased([getKeybinds().get(keyName).altKey]);
     }
     public static function pressed(keyName:String):Bool{
-        //trace('justReleased($keyName): ${FlxG.keys.anyPressed([getKeybinds().get(keyName).key]) || FlxG.keys.anyPressed([getKeybinds().get(keyName).altKey])}');
         return FlxG.keys.anyPressed([getKeybinds().get(keyName).key]) || FlxG.keys.anyPressed([getKeybinds().get(keyName).altKey]);
     }
     public static function toMappedKeybind(keybind:Keybind):MappedKeybind{
@@ -117,11 +117,7 @@ class KeyObj { //I made this bc im way too lazy to change everything ngl
         RESET = KeyMgr.justPressed('Reset');
         FlxG.stage.addEventListener(Event.ENTER_FRAME, function(e)
 		{
-			updateBinds();
-		});
-    }
-    function updateBinds(){
-        UP_P = KeyMgr.justPressed('Up');
+			UP_P = KeyMgr.justPressed('Up');
         DOWN_P = KeyMgr.justPressed('Down');
         LEFT_P = KeyMgr.justPressed('Left');
         RIGHT_P = KeyMgr.justPressed('Right');
@@ -137,5 +133,6 @@ class KeyObj { //I made this bc im way too lazy to change everything ngl
         BACK = KeyMgr.justPressed('Cancel');
         CHEAT = KeyMgr.justPressed('Cheat');
         RESET = KeyMgr.justPressed('Reset');
+		});
     }
 }

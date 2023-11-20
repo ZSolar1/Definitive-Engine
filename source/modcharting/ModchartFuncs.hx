@@ -1,6 +1,5 @@
 package modcharting;
 
-
 import haxe.Json;
 import openfl.net.FileReference;
 import llua.Lua;
@@ -229,5 +228,3 @@ class ModchartFuncs
     }
     
 }
-
-

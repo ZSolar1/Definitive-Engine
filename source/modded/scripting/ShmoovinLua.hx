@@ -9,19 +9,20 @@ import llua.Convert;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 
-class ShmoovinLua
+class ShmoovinLua extends Script
 {
 	public var lua:State = null;
 	public var scriptName:String = '';
 
-	public function new(script:String)
+	override public function new(scriptPath:String, ?mode:String = 'playstate')
 	{
+		super(scriptPath, mode);
 		lua = LuaL.newstate();
 		LuaL.openlibs(lua);
 		Lua.init_callbacks(lua);
 		try
 		{
-			var result:Dynamic = LuaL.dofile(lua, script);
+			var result:Dynamic = LuaL.dofile(lua, scriptPath);
 			var resultStr:String = Lua.tostring(lua, result);
 			if (resultStr != null && result != 0)
 			{
@@ -35,7 +36,7 @@ class ShmoovinLua
 			trace(e);
 			return;
 		}
-		scriptName = script;
+		scriptName = scriptPath;
 
 		// set more in future
 		set('curBeat', MusicBeatState.curBeatS);
@@ -86,23 +87,31 @@ class ShmoovinLua
 			ModchartFuncs.ease(beat, time, easeStr, argsAsString);
 			
 		});
-		callLua('create', []);
+		call('create', []);
+	}
+
+	override public function unload()
+	{
+		super.unload();
+		Lua.gc(lua, Lua.LUA_GCSTOP, 0);
+		Lua.close(lua);
 	}
 
 	var errors:Array<String> = [];
-	public function callLua(theFunction:String, ?theArguments:Array<Dynamic>):Dynamic //adapted from troll engine
+	override public function call(func:String, ?args:Array<Dynamic>, ?theObject:Dynamic, ?exVars:Map<String,Dynamic>)
 	{
-		if (theArguments == null)
+		super.call(func, args);
+		if (args == null)
 		{
-			theArguments = [];
+			args = [];
 		}
-		Lua.getglobal(lua, theFunction);
+		Lua.getglobal(lua, func);
 		if (Lua.isfunction(lua, -1) == 1)
 		{
-			for (argument in theArguments)
+			for (argument in args)
 				Convert.toLua(lua, argument);
 
-			var result:Dynamic = Lua.pcall(lua, theArguments.length, 1, 0);
+			var result:Dynamic = Lua.pcall(lua, args.length, 1, 0);
 
 			if (result != 0)
 			{
@@ -111,13 +120,13 @@ class ShmoovinLua
 				trace(err);
 				if (!errors.contains(err))
 				{
-					var theArguments = [
-						for (argument in theArguments)
+					var args = [
+						for (argument in args)
 						{
 							(argument is String ? '"$argument"' : Std.string(argument));
 						}
 					];
-					Sys.println('$scriptName: Uh oh! error in called function: $theFunction(${theArguments.join(', ')}): $err');
+					Sys.println('$scriptName: Uh oh! error in called function: $func(${args.join(', ')}): $err');
 					errors.push(err);
 					while (errors.length > 20)
 						errors.shift();
@@ -136,7 +145,8 @@ class ShmoovinLua
         return 0;
 	}
 
-	public function get(variable:String):Dynamic {
+	override public function get(variable:String) {
+		super.get(variable);
 		if (lua == null){
 			return null;
         }
@@ -147,12 +157,14 @@ class ShmoovinLua
 		return ret;
 	}
 
-	public function set(variable:String, data:Dynamic):Void
+	override public function set(variable:String, data:Dynamic)
 	{
+		super.set(variable, data);
 		if(lua == null){
-			return;
+			return Dynamic;
         }
 		Convert.toLua(lua, data);
 		Lua.setglobal(lua, variable);
+		return Dynamic;
 	}
 }

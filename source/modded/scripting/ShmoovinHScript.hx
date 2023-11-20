@@ -1,5 +1,6 @@
 package modded.scripting;
 
+import modcharting.ModchartFuncs;
 import sys.io.File;
 import sys.FileSystem;
 import modcharting.ModchartFile;
@@ -31,13 +32,14 @@ import openfl.filters.DropShadowFilter;
 import openfl.filters.GlowFilter;
 import openfl.filters.ShaderFilter;
 
-class ShmoovinHScript
+class ShmoovinHScript extends Script
 {
 	public var hscriptParser:Parser;
 	public var hscriptInterp:Interp;
 
-	public function new(scriptPath:String)
+	override public function new(scriptPath:String, ?mode:String = 'playstate')
 	{
+		super(scriptPath, mode);
 		hscriptParser = new hscript.Parser();
 		hscriptInterp = new hscript.Interp();
 
@@ -72,7 +74,7 @@ class ShmoovinHScript
 		hscriptInterp.variables.set("ShaderFilter", ShaderFilter);
 
 		// Definitive Engine stuff
-		hscriptInterp.variables.set("Playstate", PlayState);
+		hscriptInterp.variables.set("PlayState", PlayState);
 		hscriptInterp.variables.set("instance", PlayState.instance);
 		hscriptInterp.variables.set("curBeat", MusicBeatState.curBeatS);
 		hscriptInterp.variables.set("curStep", MusicBeatState.curStepS);
@@ -80,39 +82,52 @@ class ShmoovinHScript
 		hscriptInterp.variables.set('ModchartUtil', ModchartUtil);
 		hscriptInterp.variables.set('Modifier', Modifier);
 		hscriptInterp.variables.set('NoteMovement', NoteMovement);
+		hscriptInterp.variables.set('Conductor', Conductor);
 		hscriptInterp.variables.set('NotePositionData', NotePositionData);
 		hscriptInterp.variables.set('ModchartFile', ModchartFile);
+		hscriptInterp.variables.set('ModchartFuncs', ModchartFuncs);
 
 		hscriptInterp.execute(hscriptParser.parseString(File.getContent(scriptPath)));
-		callHscript("create", []);
+		call("start", []);
 	}
 
-	public function get(variable:String):Dynamic
+	override public function get(variable:String):Dynamic
 	{
+		super.get(variable);
 		if (hscriptInterp == null)
 			return null;
 
 		return hscriptInterp.variables.get(variable);
 	}
 
-	public function set(variable:String, value:Dynamic):Void
-	{
-		if (hscriptInterp == null)
-			return;
-
-		hscriptInterp.variables.set(variable, value);
+	override public function unload(){
+		super.unload();
+		hscriptInterp = null;
+		hscriptParser = null;
 	}
 
-	public function exists(variable:String):Bool
+	override public function set(variable:String, value:Dynamic)
 	{
+		super.set(variable, value);
+		if (hscriptInterp == null)
+			return Dynamic;
+
+		hscriptInterp.variables.set(variable, value);
+		return Dynamic;
+	}
+
+	override public function exists(variable:String):Bool
+	{
+		super.exists(variable);
 		if (hscriptInterp == null)
 			return false;
 
 		return hscriptInterp.variables.exists(variable);
 	}
 
-	public function callHscript(functionName:String, args:Array<Dynamic>, ?theObject:Any, ?exVars:Map<String,Dynamic>)
+	override public function call(functionName:String, ?args:Array<Dynamic>, ?theObject:Dynamic, ?exVars:Map<String,Dynamic>)
 	{
+		super.call(functionName, args);
 		var daFunc = get(functionName);
 		if (!Reflect.isFunction(daFunc))
 			return null;
@@ -134,7 +149,7 @@ class ShmoovinHScript
 			set(key, exVars.get(key));
 		}
 
-		var returnVal:Any = null;
+		var returnVal:Dynamic = null;
 		try
 		{
 			returnVal = Reflect.callMethod(theObject, daFunc, args);

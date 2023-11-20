@@ -1,4 +1,5 @@
 package modcharting;
+
 import flixel.math.FlxMath;
 import haxe.Exception;
 import haxe.Json;
