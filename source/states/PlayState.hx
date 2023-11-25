@@ -30,7 +30,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
-import flixel.system.FlxSound;
+import flixel.sound.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -159,7 +159,7 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD);
 
-		FlxCamera.defaultCameras = [camGame];
+		FlxCamera.defaultCameras = [camGame]; //I tried using what it told me but the camera stopped moving and im too lazy to fix it.
 		persistentUpdate = true;
 		persistentDraw = true;
 
@@ -235,7 +235,8 @@ class PlayState extends MusicBeatState
 		}
 		curStage = SONG.stage.trim();
 		// honestly i would rather hardcode base game stage names instead of going into the game itself for every song, every difficulty.
-		// (I could alter the jsons, but if its too big(happens often) it will just show a bunch of NUL signs. its strange.)
+		// Just found out it's impossible anyway. If the json is too big it will just show a bunch of "NUL" signs in vsc. it's strange(happens with every old base-game json).
+		// Just realized i could re-export the outdated jsons but im too lazy for that.
 		if (SONG.stage == null)
 		{
 			if (curSong == 'Tutorial' || curSong == 'Bopeebo' || curSong == 'Fresh' || curSong == 'Dadbattle')
@@ -707,7 +708,7 @@ class PlayState extends MusicBeatState
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
 			'health', 0, 2);
 		healthBar.scrollFactor.set();
-		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
+		healthBar.createFilledBar(dad.healthColor, boyfriend.healthColor);
 		add(healthBar);
 
 		scoreTxt = new FlxText(0, healthBarBG.y + 45, 0, "", 20);
@@ -717,11 +718,11 @@ class PlayState extends MusicBeatState
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
-		iconP1 = new HealthIcon(SONG.player1, true);
+		iconP1 = new HealthIcon(boyfriend.healthIcon, true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
 		add(iconP1);
 
-		iconP2 = new HealthIcon(SONG.player2, false);
+		iconP2 = new HealthIcon(dad.healthIcon, false);
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
 

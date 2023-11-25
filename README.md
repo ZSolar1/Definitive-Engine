@@ -18,16 +18,18 @@
 	- Custom Week Loading
 	- Custom hscript and lua support
 	- A better hit detection
+	- Health Bar Colors
  
  - ##  What we are planning to add: 
+	- ## In-Game things:
 	  - Lua/Hscript that also supports things like notitg-type modcharts or regular modcharts, moving the window or moving things out of the window using a custom window library, adding shaders, making entire coding languages, custom menus, videos in the menus or in songs, etc.
 	  - Custom Character Functionality
-	  - Health Bar Colors
 	  - A Stage Editor
+	  - Custom Stages
+	  - Github Auto-Updater
 	  - Custom Skins
 	  - A Shader Editor
 	  - A Menu Editor
-	  - Custom Icon Functionality
 	  - A Modchart Editor
 	  - Improved Performance
 	  - Icon Bop On Note Hit
@@ -35,6 +37,10 @@
 	  - A Credits Menu
 	  
 	And way more in the future! 
+
+ - ##  What we are still considering adding:
+	- Multiplayer
+	- Custom website
 
  - ## Some extra information
 	 Please make sure to give feedback, feature requests, bugs, or questions in the Issues section of this repository. Any outside help using pull requests would be appreciated and if we use your addition, you will be credited. Any offers to help work on this engine are HIGHLY appreciated, as there is currently a very small team of people working on this huge project. There will be a changelog along with each build of the engine, along with source code.

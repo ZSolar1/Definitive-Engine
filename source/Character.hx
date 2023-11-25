@@ -1,5 +1,7 @@
 package;
 
+import flixel.util.FlxColor;
+import lime.utils.Int32Array;
 import sys.io.File;
 import tjson.TJSON;
 import sys.FileSystem;
@@ -26,12 +28,15 @@ typedef CharData =
 	var anims:Array<AnimData>;
 	var pngPath:String;
 	var xmlPath:String;
+	var color:Int;
+	var icon:String;
 }
 
 class Character extends FlxSprite
 {
 	public var animOffsets:Map<String, Array<Dynamic>>;
 	public var debugMode:Bool = false;
+	public var healthColor:Int;
 
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = 'bf';
@@ -39,13 +44,20 @@ class Character extends FlxSprite
 	public var holdTimer:Float = 0;
 
 	public var baseChars:Array<String> = [
-		'bf', 'bf-pixel', 'bf-pixel-dead', 'bf-car', 'gf', 'gf-car', 'gf-christmas', 'dad', 'mom', 'mom-car', 'spooky', 'pico', 'senpai', 'senpai-angry',
+		'bf', 'bf-pixel', 'bf-pixel-dead', 'bf-car', 'gf', 'gf-pixel', 'gf-car', 'gf-christmas', 'dad', 'mom', 'mom-car', 'spooky', 'pico', 'senpai', 'senpai-angry',
 		'spirit', 'parents-christmas'
 	];
 	public var characterData:CharData;
+	public var healthIcon:String = 'bf';
 
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)
 	{
+		if (this.isPlayer){
+			healthColor = FlxColor.GREEN;
+		}else{
+			healthColor = FlxColor.RED;
+		}
+		
 		animOffsets = new Map<String, Array<Dynamic>>();
 		super(x, y);
 
@@ -57,10 +69,11 @@ class Character extends FlxSprite
 
 		if (baseChars.contains(curCharacter))
 		{
+			healthIcon = curCharacter;
 			switch (curCharacter)
 			{
 				case 'gf':
-					// GIRLFRIEND CODE
+					healthColor = 0xFFa5004d;
 					tex = FlxAtlasFrames.fromSparrow('assets/images/GF_assets.png', 'assets/images/GF_assets.xml');
 					frames = tex;
 					animation.addByPrefix('cheer', 'GF Cheer', 24, false);
@@ -92,6 +105,7 @@ class Character extends FlxSprite
 					playAnim('danceRight');
 
 				case 'gf-christmas':
+					healthColor = 0xFFa5004d;
 					tex = FlxAtlasFrames.fromSparrow('assets/images/christmas/gfChristmas.png', 'assets/images/christmas/gfChristmas.xml');
 					frames = tex;
 					animation.addByPrefix('cheer', 'GF Cheer', 24, false);
@@ -123,6 +137,7 @@ class Character extends FlxSprite
 					playAnim('danceRight');
 
 				case 'gf-car':
+					healthColor = 0xFFa5004d;
 					tex = FlxAtlasFrames.fromSparrow('assets/images/gfCar.png', 'assets/images/gfCar.xml');
 					frames = tex;
 					animation.addByIndices('singUP', 'GF Dancing Beat Hair blowing CAR', [0], "", 24, false);
@@ -137,6 +152,7 @@ class Character extends FlxSprite
 					playAnim('danceRight');
 
 				case 'gf-pixel':
+					healthColor = 0xFFa5004d;
 					tex = FlxAtlasFrames.fromSparrow('assets/images/weeb/gfPixel.png', 'assets/images/weeb/gfPixel.xml');
 					frames = tex;
 					animation.addByIndices('singUP', 'GF IDLE', [2], "", 24, false);
@@ -153,7 +169,8 @@ class Character extends FlxSprite
 					antialiasing = false;
 
 				case 'dad':
-					// DAD ANIMATION LOADING CODE
+					healthColor = 0xFFaf66ce;
+				// DAD ANIMATION LOADING CODE
 					tex = FlxAtlasFrames.fromSparrow('assets/images/DADDY_DEAREST.png', 'assets/images/DADDY_DEAREST.xml');
 					frames = tex;
 					animation.addByPrefix('idle', 'Dad idle dance', 24);
@@ -170,6 +187,7 @@ class Character extends FlxSprite
 
 					playAnim('idle');
 				case 'spooky':
+					healthColor = 0xffc7a069;
 					tex = FlxAtlasFrames.fromSparrow('assets/images/spooky_kids_assets.png', 'assets/images/spooky_kids_assets.xml');
 					frames = tex;
 					animation.addByPrefix('singUP', 'spooky UP NOTE', 24, false);
@@ -189,6 +207,7 @@ class Character extends FlxSprite
 
 					playAnim('danceRight');
 				case 'mom':
+					healthColor = 0xFFd8558e;
 					tex = FlxAtlasFrames.fromSparrow('assets/images/Mom_Assets.png', 'assets/images/Mom_Assets.xml');
 					frames = tex;
 
@@ -209,6 +228,7 @@ class Character extends FlxSprite
 					playAnim('idle');
 
 				case 'mom-car':
+					healthColor = 0xFFd8558e;
 					tex = FlxAtlasFrames.fromSparrow('assets/images/momCar.png', 'assets/images/momCar.xml');
 					frames = tex;
 
@@ -228,6 +248,7 @@ class Character extends FlxSprite
 
 					playAnim('idle');
 				case 'monster':
+					healthColor = 0xFFf3ff6e;
 					tex = FlxAtlasFrames.fromSparrow('assets/images/Monster_Assets.png', 'assets/images/Monster_Assets.xml');
 					frames = tex;
 					animation.addByPrefix('idle', 'monster idle', 24, false);
@@ -243,6 +264,7 @@ class Character extends FlxSprite
 					addOffset("singDOWN", -30, -40);
 					playAnim('idle');
 				case 'monster-christmas':
+					healthColor = 0xFFf3ff6e;
 					tex = FlxAtlasFrames.fromSparrow('assets/images/christmas/monsterChristmas.png', 'assets/images/christmas/monsterChristmas.xml');
 					frames = tex;
 					animation.addByPrefix('idle', 'monster idle', 24, false);
@@ -258,6 +280,7 @@ class Character extends FlxSprite
 					addOffset("singDOWN", -40, -94);
 					playAnim('idle');
 				case 'pico':
+					healthColor = 0xFFb7d855;
 					tex = FlxAtlasFrames.fromSparrow('assets/images/Pico_FNF_assetss.png', 'assets/images/Pico_FNF_assetss.xml');
 					frames = tex;
 					animation.addByPrefix('idle', "Pico Idle Dance", 24);
@@ -297,6 +320,7 @@ class Character extends FlxSprite
 					flipX = true;
 
 				case 'bf':
+					healthColor = 0xFF31b0d1;
 					var tex = FlxAtlasFrames.fromSparrow('assets/images/BOYFRIEND.png', 'assets/images/BOYFRIEND.xml');
 					frames = tex;
 					animation.addByPrefix('idle', 'BF idle dance', 24, false);
@@ -336,6 +360,7 @@ class Character extends FlxSprite
 					flipX = true;
 
 				case 'bf-christmas':
+					healthColor = 0xFF31b0d1;
 					var tex = FlxAtlasFrames.fromSparrow('assets/images/christmas/bfChristmas.png', 'assets/images/christmas/bfChristmas.xml');
 					frames = tex;
 					animation.addByPrefix('idle', 'BF idle dance', 24, false);
@@ -364,6 +389,7 @@ class Character extends FlxSprite
 
 					flipX = true;
 				case 'bf-car':
+					healthColor = 0xFF31b0d1;
 					var tex = FlxAtlasFrames.fromSparrow('assets/images/bfCar.png', 'assets/images/bfCar.xml');
 					frames = tex;
 					animation.addByPrefix('idle', 'BF idle dance', 24, false);
@@ -389,6 +415,7 @@ class Character extends FlxSprite
 
 					flipX = true;
 				case 'bf-pixel':
+					healthColor = 0xFF7bd6f6;
 					frames = FlxAtlasFrames.fromSparrow('assets/images/weeb/bfPixel.png', 'assets/images/weeb/bfPixel.xml');
 					animation.addByPrefix('idle', 'BF IDLE', 24, false);
 					animation.addByPrefix('singUP', 'BF UP NOTE', 24, false);
@@ -422,6 +449,7 @@ class Character extends FlxSprite
 
 					flipX = true;
 				case 'bf-pixel-dead':
+					healthColor = 0xFF7bd6f6;
 					frames = FlxAtlasFrames.fromSparrow('assets/images/weeb/bfPixelsDEAD.png', 'assets/images/weeb/bfPixelsDEAD.xml');
 					animation.addByPrefix('singUP', "BF Dies pixel", 24, false);
 					animation.addByPrefix('firstDeath', "BF Dies pixel", 24, false);
@@ -440,6 +468,7 @@ class Character extends FlxSprite
 					flipX = true;
 
 				case 'senpai':
+					healthColor = 0xFFffaa6f;	
 					frames = FlxAtlasFrames.fromSparrow('assets/images/weeb/senpai.png', 'assets/images/weeb/senpai.xml');
 					animation.addByPrefix('idle', 'Senpai Idle', 24, false);
 					animation.addByPrefix('singUP', 'SENPAI UP NOTE', 24, false);
@@ -460,6 +489,7 @@ class Character extends FlxSprite
 
 					antialiasing = false;
 				case 'senpai-angry':
+					healthColor = 0xFFffaa6f;	
 					frames = FlxAtlasFrames.fromSparrow('assets/images/weeb/senpai.png', 'assets/images/weeb/senpai.xml');
 					animation.addByPrefix('idle', 'Angry Senpai Idle', 24, false);
 					animation.addByPrefix('singUP', 'Angry Senpai UP NOTE', 24, false);
@@ -480,6 +510,7 @@ class Character extends FlxSprite
 					antialiasing = false;
 
 				case 'spirit':
+					healthColor = 0xFFff3c6e;	
 					frames = FlxAtlasFrames.fromSpriteSheetPacker('assets/images/weeb/spirit.png', 'assets/images/weeb/spirit.txt');
 					animation.addByPrefix('idle', "idle spirit_", 24, false);
 					animation.addByPrefix('singUP', "up_", 24, false);
@@ -501,6 +532,7 @@ class Character extends FlxSprite
 					antialiasing = false;
 
 				case 'parents-christmas':
+					healthColor = 0xFFd855c1;	
 					frames = FlxAtlasFrames.fromSparrow('assets/images/christmas/mom_dad_christmas_assets.png',
 						'assets/images/christmas/mom_dad_christmas_assets.xml');
 					animation.addByPrefix('idle', 'Parent Christmas Idle', 24, false);
@@ -530,6 +562,7 @@ class Character extends FlxSprite
 		}
 		else
 		{
+			trace('custom character! character: $character');
 			if (FileSystem.exists('mods/'))
 			{
 				for (mod in FileSystem.readDirectory('mods/'))
@@ -553,6 +586,8 @@ class Character extends FlxSprite
 						trace(characterData.pngPath);
 						trace(characterData.xmlPath);
 						break;
+						healthColor = characterData.color;
+						healthIcon = characterData.icon;
 					}
 				}
 			}
