@@ -1,4 +1,4 @@
-# Definitive Engine
+# Definitive Engine (Canned due to basically remaking the wheel, just use psych engine)
 
  - ## What is it? 
 	  Definitive Engine is all about making modding a breeze! It's built on top of the base game, so you can easily customize it. There is currently an extremely detailed wiki that covers everything from modding the the engine externally to diving into the source code. Don't think that all of this documentation and information on how to use the engine means everything is hard to use though, because we want this engine to be as easy to mod as possible. We don't want this engine to be too cluttered, and keep a lot of the base game aspects. We want it to act like a clean slate of fnf from the surface, but once you dig deep, we want people to feel like this engine can do basically anything without too much difficulty.
